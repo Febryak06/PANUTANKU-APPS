@@ -1,0 +1,19 @@
+﻿transaction_id,tanggal,unit_kerja,vendor,item_laporan,spesifikasi,qty,satuan,harga_satuan_laporan,total_laporan,provinsi,kab_kota,metode
+TRX-001,2026-03-12,Unit Umum,CV Maju Jaya Persada,Kursi kerja lipat,Besi + sandaran busa,30,unit,1650000,49500000,Riau,Pekanbaru,Tender Cepat
+TRX-002,2026-03-10,Sekretariat,PT Sinar Teknologi,Printer inkjet,"Warna A4, multifungsi",8,unit,3450000,27600000,DKI Jakarta,Jakarta Pusat,E-Purchasing
+TRX-003,2026-03-09,Operasional,CV Tirta Bersih,Air mineral 600 ml,Karton isi 24,120,karton,78000,9360000,Riau,Pekanbaru,Pengadaan Langsung
+TRX-004,2026-03-08,SDM,PT Kertas Nusantara,Kertas A4 80 gsm,Rim 500 lembar,200,rim,72000,14400000,Jawa Barat,Bandung,E-Purchasing
+TRX-005,2026-03-06,Logistik,PT Bangun Prima,Semen Portland 50 kg,Type I,150,zak,92000,13800000,Jawa Timur,Surabaya,Tender Cepat
+TRX-006,2026-03-06,Gudang,CV Agro Sentosa,Beras medium 5 kg,Kemasan retail,100,pak,89000,8900000,Sumatera Utara,Medan,Pengadaan Langsung
+TRX-007,2026-03-05,Konsumsi,CV Pangan Makmur,Telur ayam ras,Curah,250,kg,39000,9750000,Riau,Pekanbaru,Pengadaan Langsung
+TRX-008,2026-03-05,Konsumsi,PT Dapur Bersih,Minyak goreng 1 liter,Kemasan pouch,180,liter,20500,3690000,Jawa Tengah,Semarang,E-Purchasing
+TRX-009,2026-03-04,Pemeliharaan,PT Warna Sejahtera,Cat tembok 5 kg,Interior putih,60,pail,215000,12900000,Riau,Pekanbaru,Pengadaan Langsung
+TRX-010,2026-03-04,Transportasi,PT Energi Karya,Solar industri,Pembelian bulk,2500,liter,14800,37000000,Jawa Timur,Surabaya,Tender Cepat
+TRX-011,2026-03-03,Teknologi Informasi,PT Digital Maju,Laptop 14 inch,Core i5 RAM 16GB SSD 512GB,12,unit,11250000,135000000,DKI Jakarta,Jakarta Selatan,E-Catalog
+TRX-012,2026-03-03,Teknologi Informasi,CV Data Ringkas,Flashdisk 64GB,USB 3.0,75,unit,145000,10875000,Riau,Pekanbaru,Pengadaan Langsung
+TRX-013,2026-03-02,Pelayanan,PT Hygiene Solusi,Layanan kebersihan harian,1 bulan / 5 petugas,1,paket,22500000,22500000,Riau,Pekanbaru,Tender Cepat
+TRX-014,2026-03-01,Kesehatan,CV Medika Jaya,Masker medis,Box isi 50,300,box,48000,14400000,Jawa Barat,Bandung,Pengadaan Langsung
+TRX-015,2026-02-28,Konsumsi,CV Segar Sentosa,Gula pasir,Kemasan 1 kg,220,kg,19200,4224000,Sumatera Barat,Padang,Pengadaan Langsung
+TRX-016,2026-02-27,Konsumsi,CV Protein Nusantara,Daging ayam ras,Segar,140,kg,46000,6440000,Riau,Pekanbaru,Pengadaan Langsung
+TRX-017,2026-02-27,Konsumsi,CV Laut Kita,Ikan tongkol,Segar,100,kg,68000,6800000,Sulawesi Selatan,Makassar,Pengadaan Langsung
+TRX-018,2026-02-26,Umum,PT Cahaya Lampu,Lampu LED 18W,Bohlam,180,unit,42000,7560000,Banten,Tangerang,E-Purchasing
