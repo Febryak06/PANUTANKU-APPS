@@ -1,19 +1,2011 @@
-﻿item_laporan,komoditas_bps,source_id,satuan_referensi,harga_referensi_demo,status_mapping,catatan
-Kursi kerja lipat,Kursi kantor lipat,SRC-IHPB-2024,unit,1000000,Mapped,Harga demo untuk uji logika; validasi final tetap menggunakan referensi resmi BPS.
-Printer inkjet,Printer inkjet A4,SRC-IHPB-2024,unit,2580000,Mapped,Harga demo.
-Air mineral 600 ml,Air mineral kemasan,SRC-HKN-2024,karton,66500,Mapped,Harga demo.
-Kertas A4 80 gsm,Kertas HVS A4,SRC-HKN-NON-2024,rim,61000,Mapped,Harga demo.
-Semen Portland 50 kg,Semen portland,SRC-IHPB-2024,zak,70000,Mapped,Harga demo.
-Beras medium 5 kg,Beras medium,SRC-HKN-2024,pak,76000,Mapped,Harga demo.
-Telur ayam ras,Telur ayam ras,SRC-HKN-2024,kg,30000,Mapped,Harga demo.
-Minyak goreng 1 liter,Minyak goreng kemasan,SRC-HKN-2024,liter,16800,Mapped,Harga demo.
-Cat tembok 5 kg,Cat tembok interior,SRC-HKN-NON-2024,pail,175000,Mapped,Harga demo.
-Solar industri,Bahan bakar diesel,SRC-IHPB-2024,liter,13200,Mapped,Harga demo.
-Laptop 14 inch,,,unit,,Perlu Review,Tidak ada komoditas BPS langsung; gunakan benchmark pembanding tambahan.
-Flashdisk 64GB,,,unit,,Perlu Review,Belum dipetakan; butuh kamus komoditas internal.
-Layanan kebersihan harian,Jasa kebersihan,SRC-HKN-NON-2024,paket,18500000,Mapped,Harga demo.
-Masker medis,Masker medis,SRC-HKN-NON-2024,box,41000,Mapped,Harga demo.
-Gula pasir,Gula pasir,SRC-HKN-2024,kg,16500,Mapped,Harga demo.
-Daging ayam ras,Daging ayam ras,SRC-HKN-2024,kg,36500,Mapped,Harga demo.
-Ikan tongkol,Ikan tongkol/ikan ambu-ambu,SRC-HKN-2024,kg,56000,Mapped,Harga demo.
-Lampu LED 18W,Lampu LED rumah tangga,SRC-HKN-NON-2024,unit,35000,Mapped,Harga demo.
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PANUTANKU 5.0 — Prototype Responsif</title>
+  <meta name="description" content="Prototype responsif PANUTANKU 5.0 untuk audit harga pengadaan berbasis data BPS.">
+  <style>
+    :root {
+      --navy: #103b8b;
+      --navy-2: #0d2f72;
+      --teal: #16b2ad;
+      --teal-2: #e8fbfa;
+      --orange: #f28c1b;
+      --green: #109b53;
+      --green-2: #eaf8ef;
+      --danger: #d64c4c;
+      --danger-2: #fff0f0;
+      --warning: #f5a623;
+      --warning-2: #fff7ea;
+      --bg: #f4f7fc;
+      --card: #ffffff;
+      --text: #18253d;
+      --muted: #6d7890;
+      --line: #dce5f2;
+      --shadow: 0 20px 45px rgba(16, 59, 139, 0.10);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --page-max: 1440px;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: var(--navy); text-decoration: none; }
+    button, input, select { font: inherit; }
+    button {
+      border: 0;
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease, opacity .18s ease;
+    }
+    button:hover { transform: translateY(-1px); }
+    button:disabled { cursor: not-allowed; opacity: .55; transform: none; }
+    .hidden { display: none !important; }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      border: 0;
+    }
+    .splash {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(180deg, #123b86 0%, #1599a5 100%);
+      overflow: hidden;
+      transition: opacity .45s ease, visibility .45s ease;
+    }
+    .splash.is-hidden { opacity: 0; visibility: hidden; }
+    .splash::before,
+    .splash::after {
+      content: "";
+      position: absolute;
+      inset: auto;
+      width: 52vmax;
+      height: 52vmax;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, rgba(255,255,255,.12), transparent 60%);
+      pointer-events: none;
+    }
+    .splash::before { top: -16vmax; right: -12vmax; }
+    .splash::after { bottom: -22vmax; left: -20vmax; }
+    .splash-card {
+      position: relative;
+      z-index: 1;
+      width: min(94vw, 1040px);
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      border-radius: 36px;
+      padding: clamp(28px, 4vw, 48px);
+      box-shadow: 0 24px 90px rgba(0, 0, 0, .20);
+      display: grid;
+      gap: 24px;
+      text-align: center;
+    }
+    .splash-logo-wrap { display: grid; place-items: center; }
+    .splash-logo { width: min(100%, 760px); height: auto; }
+    .splash-title { font-size: clamp(1.7rem, 3vw, 2.6rem); font-weight: 800; letter-spacing: -.03em; }
+    .splash-copy { color: var(--muted); font-size: clamp(.95rem, 1.8vw, 1.1rem); }
+    .pill-row, .auth-pills { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: .82rem;
+      font-weight: 700;
+      background: #eef4ff;
+      color: var(--navy);
+    }
+    .pill.teal { background: var(--teal-2); color: #0c7d80; }
+    .pill.orange { background: #fff0df; color: #b56400; }
+    .pill.green { background: var(--green-2); color: #0a7b40; }
+    .splash-footer { color: rgba(255,255,255,.88); font-size: .95rem; }
+
+    .screen-shell {
+      min-height: 100vh;
+      display: grid;
+      background:
+        radial-gradient(circle at top right, rgba(22,178,173,.08), transparent 24%),
+        radial-gradient(circle at bottom left, rgba(16,59,139,.08), transparent 24%),
+        var(--bg);
+    }
+    .auth-layout {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr;
+      max-width: var(--page-max);
+      width: 100%;
+      margin: 0 auto;
+    }
+    .auth-side {
+      display: none;
+      background: linear-gradient(180deg, #123b86 0%, #1599a5 100%);
+      color: #fff;
+      padding: 44px;
+      position: relative;
+      overflow: hidden;
+    }
+    .auth-side::before,
+    .auth-side::after {
+      content: "";
+      position: absolute;
+      width: 340px;
+      height: 340px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, rgba(255,255,255,.20), transparent 70%);
+      pointer-events: none;
+    }
+    .auth-side::before { right: -120px; top: -100px; }
+    .auth-side::after { left: -140px; bottom: -140px; }
+    .auth-side-inner { position: relative; z-index: 1; display: grid; gap: 28px; align-content: space-between; }
+    .auth-side h1, .auth-side h2, .auth-side h3, .auth-side p { margin: 0; }
+    .auth-side-card {
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 28px;
+      padding: 28px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.18);
+    }
+    .auth-side-card .logo-inline {
+      width: min(100%, 480px);
+      margin-bottom: 18px;
+      background: rgba(255,255,255,.95);
+      padding: 16px;
+      border-radius: 20px;
+    }
+    .auth-side-kpis {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .auth-side-kpi {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.16);
+    }
+    .auth-side-kpi strong { display: block; font-size: 1.4rem; }
+    .auth-panel {
+      padding: clamp(20px, 4vw, 36px);
+      display: grid;
+      place-items: center;
+    }
+    .auth-card {
+      width: min(100%, 560px);
+      background: rgba(255,255,255,.88);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.9);
+      border-radius: 32px;
+      padding: clamp(24px, 4vw, 40px);
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 20px;
+    }
+    .auth-header { display: grid; gap: 10px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #eef4ff;
+      color: var(--navy);
+      font-size: .85rem;
+      font-weight: 700;
+    }
+    .auth-header h2 { margin: 0; font-size: clamp(1.45rem, 3vw, 2rem); letter-spacing: -.03em; }
+    .auth-header p { margin: 0; color: var(--muted); }
+    .form-grid { display: grid; gap: 16px; }
+    .field { display: grid; gap: 8px; }
+    .field label { font-size: .92rem; font-weight: 700; }
+    .input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 0 14px;
+      min-height: 56px;
+    }
+    .input-wrap:focus-within { border-color: rgba(16,59,139,.45); box-shadow: 0 0 0 4px rgba(16,59,139,.08); }
+    .input-wrap input {
+      flex: 1;
+      border: 0;
+      background: transparent;
+      outline: none;
+      min-width: 0;
+      color: var(--text);
+    }
+    .input-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: #eef4ff;
+      color: var(--navy);
+      display: grid;
+      place-items: center;
+      font-size: .78rem;
+      font-weight: 800;
+      flex: 0 0 auto;
+    }
+    .input-action {
+      background: transparent;
+      color: var(--navy);
+      font-size: .9rem;
+      padding: 6px 0 6px 8px;
+    }
+    .field-error {
+      min-height: 18px;
+      font-size: .84rem;
+      color: var(--danger);
+    }
+    .button-row, .auth-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 50px;
+      padding: 0 18px;
+      border-radius: 14px;
+      font-weight: 800;
+      box-shadow: 0 10px 24px rgba(16,59,139,.08);
+    }
+    .btn.primary { background: var(--navy); color: #fff; }
+    .btn.secondary { background: #fff; color: var(--navy); border: 1px solid var(--line); }
+    .btn.teal { background: var(--teal); color: #083c41; }
+    .btn.ghost { background: transparent; color: var(--navy); box-shadow: none; }
+    .btn.warning { background: var(--orange); color: #fff; }
+    .btn.success { background: var(--green); color: #fff; }
+    .microcopy { font-size: .88rem; color: var(--muted); }
+    .divider { height: 1px; background: var(--line); }
+    .onboarding-slide {
+      display: grid;
+      gap: 18px;
+    }
+    .slide-illustration {
+      min-height: 220px;
+      border-radius: 24px;
+      padding: 24px;
+      background: linear-gradient(180deg, #f7fbff 0%, #eef6ff 100%);
+      border: 1px solid #e0eaf8;
+      position: relative;
+      overflow: hidden;
+    }
+    .slide-title { margin: 0; font-size: clamp(1.35rem, 2.8vw, 1.9rem); letter-spacing: -.03em; }
+    .slide-copy, .slide-extra { margin: 0; color: var(--muted); }
+    .progress-dots { display: flex; gap: 8px; justify-content: center; }
+    .progress-dot {
+      width: 9px; height: 9px; border-radius: 999px; background: #cfd9ea;
+      transition: transform .18s ease, background-color .18s ease;
+    }
+    .progress-dot.is-active { background: var(--navy); transform: scale(1.15); }
+
+    .illu-bars,
+    .illu-alerts,
+    .illu-cases { height: 100%; display: grid; align-items: end; }
+    .illu-bars {
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      align-content: end;
+    }
+    .illu-bar-wrap { display: grid; gap: 10px; align-items: end; }
+    .illu-bar {
+      border-radius: 18px 18px 8px 8px;
+      background: linear-gradient(180deg, rgba(16,59,139,.9), rgba(16,59,139,.72));
+      min-height: 78px;
+      position: relative;
+    }
+    .illu-bar.teal { background: linear-gradient(180deg, rgba(22,178,173,.95), rgba(22,178,173,.72)); }
+    .illu-bar-label { font-size: .85rem; color: var(--muted); text-align: center; }
+    .illu-alerts { gap: 12px; align-content: start; }
+    .alert-demo-row, .case-demo-row {
+      display: grid; gap: 10px; align-items: center;
+      border-radius: 18px; background: #fff; padding: 14px 16px; border: 1px solid var(--line);
+      box-shadow: 0 10px 20px rgba(16,59,139,.05);
+    }
+    .alert-demo-row { grid-template-columns: 1fr auto; }
+    .case-demo-row { grid-template-columns: auto 1fr auto; }
+    .mini-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 6px 10px; border-radius: 999px; font-size: .78rem; font-weight: 800;
+    }
+    .mini-badge.high { background: var(--danger-2); color: var(--danger); }
+    .mini-badge.medium { background: var(--warning-2); color: #a15e00; }
+    .mini-badge.safe { background: var(--green-2); color: var(--green); }
+    .mini-avatar {
+      width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; font-weight: 900;
+      background: #eef4ff; color: var(--navy);
+    }
+    .pin-icon {
+      width: 18px; height: 18px; border-radius: 999px; background: var(--orange); box-shadow: 0 0 0 5px rgba(242,140,27,.18);
+    }
+
+    .app-shell {
+      display: none;
+      min-height: 100vh;
+      width: 100%;
+      margin: 0 auto;
+      max-width: var(--page-max);
+    }
+    .app-shell.is-active { display: grid; grid-template-columns: 1fr; }
+    .sidebar {
+      display: none;
+      color: #fff;
+      background: linear-gradient(180deg, #0f3479 0%, #153b88 38%, #123067 100%);
+      min-height: 100vh;
+      position: sticky;
+      top: 0;
+      padding: 24px 18px;
+      box-shadow: 18px 0 34px rgba(16,59,139,.12);
+    }
+    .sidebar-inner { display: grid; gap: 18px; height: 100%; }
+    .brand-block {
+      display: grid;
+      gap: 16px;
+      padding: 18px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 26px;
+    }
+    .brand-mini { width: 100%; background: #fff; padding: 12px; border-radius: 18px; }
+    .brand-copy { color: rgba(255,255,255,.78); font-size: .92rem; }
+    .side-nav { display: grid; gap: 8px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border-radius: 16px; color: #fff; background: transparent; text-align: left;
+    }
+    .nav-item.is-active, .nav-item:hover { background: rgba(255,255,255,.14); }
+    .nav-icon, .quick-icon, .download-icon, .status-icon {
+      width: 38px; height: 38px; border-radius: 14px; display: grid; place-items: center; font-weight: 900;
+      flex: 0 0 auto;
+    }
+    .nav-icon { background: rgba(255,255,255,.18); }
+    .nav-label { font-weight: 700; }
+    .side-spacer { flex: 1 1 auto; }
+    .side-footer {
+      display: grid; gap: 12px; padding: 18px; border-radius: 24px;
+      background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.12);
+    }
+    .role-chip {
+      display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px;
+      background: rgba(255,255,255,.16); font-size: .84rem; font-weight: 700;
+    }
+    .main-shell { min-width: 0; display: flex; flex-direction: column; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 18px;
+      background: rgba(244,247,252,.82);
+      border-bottom: 1px solid rgba(220,229,242,.78);
+      backdrop-filter: blur(10px);
+    }
+    .topbar-title { display: grid; gap: 2px; }
+    .topbar-title h1 { margin: 0; font-size: clamp(1.15rem, 2.5vw, 1.8rem); letter-spacing: -.03em; }
+    .topbar-title p { margin: 0; color: var(--muted); font-size: .9rem; }
+    .topbar-actions { display: flex; align-items: center; gap: 10px; }
+    .icon-btn {
+      width: 44px; height: 44px; border-radius: 14px; background: #fff; border: 1px solid var(--line);
+      box-shadow: 0 10px 22px rgba(16,59,139,.05); display: grid; place-items: center; position: relative;
+    }
+    .notif-count {
+      position: absolute; top: -5px; right: -4px; min-width: 20px; height: 20px; padding: 0 6px;
+      border-radius: 999px; background: var(--danger); color: #fff; font-size: .72rem; font-weight: 800;
+      display: grid; place-items: center;
+    }
+    .avatar-btn {
+      min-height: 44px; padding: 0 14px; border-radius: 14px; background: #fff; border: 1px solid var(--line);
+      box-shadow: 0 10px 22px rgba(16,59,139,.05); display: inline-flex; align-items: center; gap: 10px;
+      color: var(--text);
+    }
+    .avatar-bubble {
+      width: 32px; height: 32px; border-radius: 12px; background: linear-gradient(135deg, var(--navy), var(--teal)); color: #fff;
+      display: grid; place-items: center; font-weight: 800;
+    }
+    .content { padding: 18px 18px 110px; display: grid; gap: 24px; }
+    .page { display: none; gap: 20px; }
+    .page.is-active { display: grid; }
+    .hero-card, .card, .download-card, .state-card {
+      background: var(--card);
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(220,229,242,.9);
+      box-shadow: var(--shadow);
+    }
+    .hero-card {
+      padding: clamp(20px, 3vw, 28px);
+      display: grid;
+      gap: 18px;
+      background:
+        radial-gradient(circle at top right, rgba(22,178,173,.10), transparent 30%),
+        linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.98));
+    }
+    .hero-top { display: flex; gap: 14px; align-items: start; justify-content: space-between; flex-wrap: wrap; }
+    .hero-copy { display: grid; gap: 10px; max-width: 760px; }
+    .hero-copy h2 { margin: 0; font-size: clamp(1.35rem, 2.6vw, 2rem); letter-spacing: -.035em; }
+    .hero-copy p { margin: 0; color: var(--muted); }
+    .smart-banner {
+      display: flex; gap: 12px; align-items: start; flex-wrap: wrap;
+      padding: 16px 18px; border-radius: 20px; background: #eef7ff; color: #123b86; border: 1px solid #d7e7fd;
+    }
+    .smart-banner strong { display: block; margin-bottom: 2px; }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .metric-card {
+      padding: 18px;
+      border-radius: 22px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      display: grid;
+      gap: 10px;
+      min-height: 138px;
+    }
+    .metric-tone {
+      width: fit-content;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+    .metric-tone.navy { background: #edf3ff; color: var(--navy); }
+    .metric-tone.orange { background: #fff2e4; color: #b96500; }
+    .metric-tone.teal { background: #e7fbfa; color: #0d8587; }
+    .metric-tone.green { background: #eaf8ef; color: var(--green); }
+    .metric-label { color: var(--muted); font-size: .92rem; }
+    .metric-value { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 900; letter-spacing: -.03em; }
+    .metric-helper { color: var(--muted); font-size: .84rem; }
+    .content-grid,
+    .analysis-layout,
+    .cases-grid,
+    .profile-grid,
+    .transactions-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+    .card { padding: 20px; display: grid; gap: 18px; }
+    .card-head {
+      display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap;
+    }
+    .card-head h3, .card-head h4, .card-head p { margin: 0; }
+    .section-copy { color: var(--muted); font-size: .9rem; }
+    .filter-row, .chip-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .chip {
+      display: inline-flex; align-items: center; justify-content: center; min-height: 38px; padding: 0 12px;
+      border-radius: 999px; background: #fff; border: 1px solid var(--line); color: var(--text); font-weight: 700;
+    }
+    .chip.is-active { background: #eef4ff; color: var(--navy); border-color: #d6e4ff; }
+    .trend-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      align-items: end;
+      gap: 10px;
+      min-height: 200px;
+      padding-top: 10px;
+    }
+    .trend-col { display: grid; gap: 8px; justify-items: center; }
+    .trend-hit {
+      width: 100%; height: 144px; display: flex; align-items: end; justify-content: center; background: transparent;
+      padding: 0; border: 0;
+    }
+    .trend-bar {
+      width: 100%; max-width: 72px; border-radius: 18px 18px 10px 10px;
+      background: linear-gradient(180deg, rgba(22,178,173,.92), rgba(16,59,139,.88));
+      box-shadow: inset 0 -12px 20px rgba(255,255,255,.08);
+      min-height: 24px;
+    }
+    .trend-month { font-size: .84rem; color: var(--muted); }
+    .trend-tooltip {
+      min-height: 48px; padding: 12px 14px; border-radius: 18px; background: #f5fbff; border: 1px solid #d9eef7; color: #14556b;
+      font-size: .9rem;
+    }
+    .alert-list { display: grid; gap: 12px; }
+    .alert-row {
+      width: 100%; text-align: left; background: #fff; border: 1px solid var(--line); border-radius: 18px;
+      padding: 14px 16px; display: grid; gap: 10px;
+    }
+    .alert-row.is-selected { border-color: rgba(16,59,139,.3); box-shadow: 0 0 0 4px rgba(16,59,139,.08); }
+    .alert-top, .alert-bottom { display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+    .alert-title { font-weight: 800; }
+    .alert-meta { color: var(--muted); font-size: .88rem; }
+    .risk-badge {
+      display: inline-flex; align-items: center; justify-content: center; min-height: 32px; padding: 0 12px; border-radius: 999px;
+      font-size: .76rem; font-weight: 900; letter-spacing: .02em; text-transform: uppercase;
+    }
+    .risk-badge.danger { background: var(--danger-2); color: var(--danger); }
+    .risk-badge.warning { background: var(--warning-2); color: #9f6300; }
+    .risk-badge.success { background: var(--green-2); color: var(--green); }
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .quick-action {
+      padding: 16px 14px;
+      border-radius: 20px;
+      background: #fff;
+      border: 1px solid var(--line);
+      display: grid;
+      gap: 12px;
+      text-align: left;
+    }
+    .quick-icon.navy, .download-icon.navy { background: #edf3ff; color: var(--navy); }
+    .quick-icon.teal, .download-icon.teal { background: #e7fbfa; color: #0d8587; }
+    .quick-icon.orange, .download-icon.orange { background: #fff1e1; color: #ba6b02; }
+    .quick-icon.green, .download-icon.green { background: #eaf8ef; color: var(--green); }
+    .quick-icon { width: 44px; height: 44px; border-radius: 16px; }
+    .quick-title { font-weight: 800; }
+    .quick-copy { color: var(--muted); font-size: .88rem; }
+    .upload-box {
+      display: grid; gap: 14px; padding: 20px; border-radius: 22px; border: 1px dashed #b8cae8; background: linear-gradient(180deg, #fbfdff, #f3f8ff);
+    }
+    .upload-input {
+      width: 100%; min-height: 52px; padding: 12px 14px; border-radius: 16px; border: 1px solid var(--line); background: #fff;
+    }
+    .status-panel {
+      display: grid; gap: 8px; padding: 16px; border-radius: 18px; border: 1px solid var(--line); background: #fff;
+    }
+    .status-panel.loading { background: #f5fbff; border-color: #d7e8f6; }
+    .status-panel.success { background: #eefaf3; border-color: #d9efe2; }
+    .status-panel.error { background: #fff3f3; border-color: #f5d7d7; }
+    .status-panel.empty { background: #fbfcfe; border-style: dashed; }
+    .skeleton-row {
+      height: 14px; border-radius: 999px; background: linear-gradient(90deg, #e8eef7, #f3f7fc, #e8eef7); background-size: 200% 100%;
+      animation: shimmer 1.1s infinite linear;
+    }
+    @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+    .table-wrap { overflow: auto; border-radius: 18px; border: 1px solid var(--line); }
+    table { width: 100%; border-collapse: collapse; min-width: 720px; background: #fff; }
+    th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #edf2f9; }
+    th { font-size: .84rem; color: var(--muted); background: #f8fbff; }
+    td { font-size: .92rem; }
+    .mapping-status { font-weight: 800; }
+    .mapping-status.mapped { color: var(--green); }
+    .mapping-status.review { color: #b56400; }
+    .mapping-status.manual { color: var(--danger); }
+    .analysis-list { display: grid; gap: 12px; }
+    .analysis-card {
+      border: 1px solid var(--line); border-radius: 18px; background: #fff; padding: 14px 16px; display: grid; gap: 10px;
+    }
+    .analysis-card.is-selected { border-color: rgba(16,59,139,.32); box-shadow: 0 0 0 4px rgba(16,59,139,.08); }
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    .price-card {
+      border-radius: 22px;
+      padding: 20px;
+      color: #fff;
+      display: grid;
+      gap: 8px;
+      min-height: 138px;
+      box-shadow: inset 0 -14px 20px rgba(255,255,255,.08);
+    }
+    .price-card.reported { background: linear-gradient(180deg, var(--orange), #d37200); }
+    .price-card.reference { background: linear-gradient(180deg, var(--teal), #0d8587); }
+    .price-label { font-size: .95rem; opacity: .92; }
+    .price-value { font-size: clamp(1.45rem, 3vw, 2rem); font-weight: 900; letter-spacing: -.03em; }
+    .compare-footnote {
+      padding: 14px 16px; border-radius: 18px; background: #f6f9ff; border: 1px solid #e1eaf8; color: var(--text); font-size: .9rem;
+    }
+    .detail-grid {
+      display: grid; grid-template-columns: 1fr; gap: 18px;
+    }
+    .risk-panel {
+      display: grid; gap: 14px; padding: 18px; border-radius: 22px; background: linear-gradient(180deg, #fff7f7, #fff2f2);
+      border: 1px solid #f0d6d6;
+    }
+    .risk-score-row { display: flex; gap: 16px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+    .donut {
+      --value: 50;
+      width: 96px; height: 96px; border-radius: 999px;
+      background: conic-gradient(var(--danger) calc(var(--value) * 1%), #eaeef6 0);
+      display: grid; place-items: center;
+      box-shadow: inset 0 0 0 10px #fff;
+      font-weight: 900; color: var(--text);
+    }
+    .meta-list { display: grid; gap: 10px; }
+    .meta-row {
+      display: flex; gap: 10px; justify-content: space-between; align-items: start; padding: 10px 0; border-bottom: 1px dashed #e7edf7;
+    }
+    .meta-row:last-child { border-bottom: 0; }
+    .meta-label { color: var(--muted); }
+    .source-stack { display: grid; gap: 14px; }
+    .source-item {
+      border-radius: 20px; border: 1px solid var(--line); background: #fff; padding: 16px; display: grid; gap: 12px;
+    }
+    .source-meta { display: flex; gap: 10px; flex-wrap: wrap; color: var(--muted); font-size: .84rem; }
+    .source-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .case-list, .task-list, .download-grid { display: grid; gap: 12px; }
+    .case-card {
+      border-radius: 22px; border: 1px solid var(--line); background: #fff; padding: 18px; display: grid; gap: 12px;
+    }
+    .case-top, .download-top { display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+    .case-title { font-weight: 800; }
+    .case-summary { color: var(--muted); font-size: .9rem; }
+    .task-row {
+      display: grid; gap: 12px; border-radius: 18px; border: 1px solid var(--line); background: #fff; padding: 16px;
+    }
+    .task-row-top { display: flex; gap: 10px; align-items: start; justify-content: space-between; flex-wrap: wrap; }
+    .profile-select {
+      width: 100%; min-height: 52px; border-radius: 16px; border: 1px solid var(--line); padding: 0 14px; background: #fff;
+    }
+    .profile-note {
+      display: grid; gap: 10px; padding: 16px; border-radius: 18px; background: #f5fbff; border: 1px solid #d9eef7; color: #16566c;
+    }
+    .download-card {
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+      border-radius: 22px;
+    }
+    .download-copy { color: var(--muted); font-size: .9rem; }
+    .state-grid {
+      display: grid; grid-template-columns: 1fr; gap: 12px;
+    }
+    .state-card { padding: 16px; display: grid; gap: 10px; }
+    .state-card h4, .state-card p { margin: 0; }
+    .state-card small { color: var(--muted); }
+    .mobile-bottom-nav {
+      position: fixed;
+      left: 50%; bottom: 12px; transform: translateX(-50%);
+      width: min(94vw, 700px);
+      display: flex; align-items: stretch; justify-content: space-between; gap: 6px;
+      background: rgba(255,255,255,.92); backdrop-filter: blur(12px); border: 1px solid rgba(220,229,242,.95);
+      box-shadow: 0 16px 30px rgba(16,59,139,.10); border-radius: 24px; padding: 8px;
+      z-index: 12;
+    }
+    .mobile-nav-item {
+      flex: 1 1 0; min-height: 64px; border-radius: 18px; background: transparent; color: var(--muted);
+      display: grid; place-items: center; gap: 4px; padding: 6px 4px;
+    }
+    .mobile-nav-item.is-active { background: #eef4ff; color: var(--navy); }
+    .mobile-nav-item span:last-child { font-size: .74rem; font-weight: 700; }
+    .mobile-icon {
+      width: 32px; height: 32px; border-radius: 12px; display: grid; place-items: center; background: #f0f4fb; font-weight: 900;
+    }
+    .toast {
+      position: fixed; right: 18px; bottom: 96px; max-width: min(92vw, 360px);
+      padding: 14px 16px; border-radius: 18px; color: #fff; z-index: 50;
+      background: rgba(24,37,61,.94); box-shadow: 0 16px 30px rgba(0,0,0,.18);
+    }
+    .toast.success { background: rgba(16,155,83,.95); }
+    .toast.error { background: rgba(214,76,76,.95); }
+    .toast.info { background: rgba(16,59,139,.96); }
+
+    @media (min-width: 700px) {
+      .summary-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .quick-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .state-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .compare-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (min-width: 980px) {
+      .auth-layout { grid-template-columns: minmax(360px, 1.04fr) minmax(440px, .96fr); }
+      .auth-side { display: grid; }
+      .transactions-grid { grid-template-columns: 1.1fr .9fr; }
+      .detail-grid { grid-template-columns: 1.2fr .88fr; }
+      .profile-grid { grid-template-columns: 1.05fr .95fr; }
+      .cases-grid { grid-template-columns: 1.05fr .95fr; }
+      .analysis-layout { grid-template-columns: minmax(320px, .86fr) minmax(0, 1.14fr); }
+      .analysis-layout > .card:first-child { position: sticky; top: 86px; align-self: start; }
+    }
+    @media (min-width: 1100px) {
+      .app-shell.is-active { grid-template-columns: 280px 1fr; }
+      .sidebar { display: block; }
+      .topbar { padding: 18px 26px; }
+      .content { padding: 24px 26px 36px; }
+      .mobile-bottom-nav { display: none; }
+      .content-grid { grid-template-columns: 1.08fr .92fr; }
+      .analysis-layout { grid-template-columns: minmax(320px, .76fr) minmax(0, 1.24fr); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="splash" class="splash" aria-label="Splash screen">
+    <div>
+      <div class="splash-card">
+        <div class="splash-logo-wrap"><img class="splash-logo" src="assets/logo.png" alt="Logo PANUTANKU 5.0"></div>
+        <div class="pill-row">
+          <span class="pill">Resmi</span>
+          <span class="pill teal">Berbasis Data</span>
+          <span class="pill orange">Audit Ready</span>
+        </div>
+        <div>
+          <div class="splash-title">Deteksi selisih harga pengadaan dengan data resmi BPS</div>
+          <div class="splash-copy">Platform Analisis Nilai Transaksi untuk Transparansi, Akuntabilitas, dan Integritas Laporan Keuangan Perusahaan.</div>
+        </div>
+      </div>
+      <div class="splash-footer">Memeriksa status pengguna...</div>
+    </div>
+  </div>
+
+  <section id="view-onboarding" class="screen-shell hidden" aria-label="Onboarding aplikasi">
+    <div class="auth-layout">
+      <aside class="auth-side">
+        <div class="auth-side-inner">
+          <div class="auth-side-card">
+            <img src="assets/logo.png" alt="PANUTANKU 5.0" class="logo-inline">
+            <h2>Kenali audit harga pengadaan dengan pengalaman yang ringan dan profesional.</h2>
+            <p style="margin-top:10px; color: rgba(255,255,255,.84);">Prototype ini menunjukkan alur splash, onboarding, login, dashboard, analisis transaksi, sumber BPS, kasus, dan unduhan file uji.</p>
+          </div>
+          <div class="auth-side-kpis">
+            <div class="auth-side-kpi"><strong>HP & laptop</strong><span>Tampilan adaptif mengikuti device</span></div>
+            <div class="auth-side-kpi"><strong>Sumber BPS</strong><span>Link landing page & PDF contoh</span></div>
+            <div class="auth-side-kpi"><strong>Data demo</strong><span>Siap untuk simulasi fitur utama</span></div>
+            <div class="auth-side-kpi"><strong>Trust layer</strong><span>Microcopy keamanan & validasi</span></div>
+          </div>
+        </div>
+      </aside>
+      <div class="auth-panel">
+        <div class="auth-card">
+          <div class="auth-header">
+            <span class="eyebrow">Onboarding</span>
+            <h2 id="onboardingTitle"></h2>
+            <p id="onboardingCopy"></p>
+          </div>
+          <div class="onboarding-slide">
+            <div id="onboardingIllustration" class="slide-illustration"></div>
+            <p id="onboardingExtra" class="slide-extra"></p>
+            <div class="progress-dots" id="onboardingDots"></div>
+          </div>
+          <div class="auth-actions" style="justify-content: space-between;">
+            <button type="button" class="btn ghost" id="btnSkipOnboarding">Lewati</button>
+            <div class="button-row">
+              <button type="button" class="btn secondary" id="btnPrevSlide">Kembali</button>
+              <button type="button" class="btn primary" id="btnNextSlide">Lanjut</button>
+            </div>
+          </div>
+          <div class="microcopy">Swipe tidak disimulasikan pada file statis ini, tetapi tata letak, urutan pesan, dan progres 3 titik sudah diterapkan.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-login" class="screen-shell hidden" aria-label="Login aplikasi">
+    <div class="auth-layout">
+      <aside class="auth-side">
+        <div class="auth-side-inner">
+          <div class="auth-side-card">
+            <img src="assets/logo.png" alt="PANUTANKU 5.0" class="logo-inline">
+            <h2>Satu pintu masuk untuk analisis harga, deteksi anomali, dan investigasi kasus.</h2>
+            <p style="margin-top:10px; color: rgba(255,255,255,.84);">Masuk dengan akun institusi, SSO, atau gunakan mode demo untuk mengeksplorasi seluruh prototype.</p>
+          </div>
+          <div class="auth-side-card">
+            <div class="auth-pills">
+              <span class="pill">Akses terkontrol</span>
+              <span class="pill teal">Audit trail</span>
+              <span class="pill orange">Role based</span>
+            </div>
+            <p style="margin-top:14px; color: rgba(255,255,255,.86);">Data akun dan aktivitas diproses secara aman untuk mendukung analisis dan tindak lanjut yang terkontrol.</p>
+          </div>
+        </div>
+      </aside>
+      <div class="auth-panel">
+        <form id="loginForm" class="auth-card" novalidate>
+          <div class="auth-header">
+            <span class="eyebrow">Masuk Aman</span>
+            <h2>Masuk untuk mengakses analisis harga dan kasus fraud.</h2>
+            <p>Gunakan akun institusi Anda untuk melanjutkan ke sistem pemantauan pengadaan.</p>
+          </div>
+
+          <div class="form-grid">
+            <div class="field">
+              <label for="loginEmail">Email / NIP / Username</label>
+              <div class="input-wrap">
+                <span class="input-icon">ID</span>
+                <input id="loginEmail" name="loginEmail" type="text" autocomplete="username" placeholder="contoh: auditor@instansi.go.id">
+              </div>
+              <div id="loginEmailError" class="field-error"></div>
+            </div>
+
+            <div class="field">
+              <label for="loginPassword">Kata sandi</label>
+              <div class="input-wrap">
+                <span class="input-icon">PW</span>
+                <input id="loginPassword" name="loginPassword" type="password" autocomplete="current-password" placeholder="Masukkan kata sandi">
+                <button type="button" class="input-action" id="togglePassword">Tampilkan</button>
+              </div>
+              <div id="loginPasswordError" class="field-error"></div>
+            </div>
+          </div>
+
+          <div class="auth-actions">
+            <button type="submit" class="btn primary" style="flex:1 1 220px;">Masuk</button>
+            <button type="button" class="btn secondary" id="btnDemoLogin" style="flex:1 1 220px;">Masuk Demo</button>
+            <button type="button" class="btn teal" id="btnSSO" style="flex:1 1 220px;">Masuk dengan SSO Instansi</button>
+          </div>
+
+          <div class="button-row" style="justify-content: space-between; align-items:center;">
+            <button type="button" class="btn ghost" id="btnForgotPassword">Lupa kata sandi?</button>
+            <span class="microcopy">Bagaimana data saya digunakan?</span>
+          </div>
+
+          <div class="divider"></div>
+          <div class="microcopy">Mode demo menerima kredensial apa pun yang tidak kosong. Jika kosong, validasi dan pesan error akan muncul sesuai state UI yang diinginkan.</div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <div id="appShell" class="app-shell" aria-live="polite">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <div class="brand-block">
+          <img class="brand-mini" src="assets/logo.png" alt="PANUTANKU 5.0">
+          <div>
+            <div class="nav-label" style="font-size:1.05rem;">PANUTANKU 5.0</div>
+            <div class="brand-copy">Audit harga pengadaan berbasis data resmi dan workflow investigasi yang terstruktur.</div>
+          </div>
+        </div>
+
+        <nav class="side-nav" aria-label="Navigasi utama desktop">
+          <button class="nav-item" data-page="dashboard"><span class="nav-icon">B</span><span class="nav-label">Beranda</span></button>
+          <button class="nav-item" data-page="transactions"><span class="nav-icon">T</span><span class="nav-label">Transaksi</span></button>
+          <button class="nav-item" data-page="analysis"><span class="nav-icon">A</span><span class="nav-label">Analisis</span></button>
+          <button class="nav-item" data-page="cases"><span class="nav-icon">K</span><span class="nav-label">Kasus</span></button>
+          <button class="nav-item" data-page="profile"><span class="nav-icon">P</span><span class="nav-label">Profil</span></button>
+        </nav>
+
+        <div class="side-spacer"></div>
+
+        <div class="side-footer">
+          <div class="role-chip" id="sidebarRoleChip">Peran aktif: Auditor</div>
+          <div style="font-weight: 800;">Prototype responsif</div>
+          <div class="brand-copy">Buka file ini di browser HP maupun laptop. Tata letak, navigasi, kartu, dan panel analisis akan menyesuaikan ukuran layar.</div>
+          <button type="button" class="btn secondary" id="btnLogoutSidebar">Keluar</button>
+        </div>
+      </div>
+    </aside>
+
+    <div class="main-shell">
+      <header class="topbar">
+        <div class="topbar-title">
+          <h1 id="topbarTitle">Beranda</h1>
+          <p id="topbarSubtitle">Pantau transaksi, temukan anomali, dan tindak lanjuti kasus dari satu layar utama.</p>
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-btn" type="button" aria-label="Notifikasi">
+            N
+            <span class="notif-count">3</span>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Bantuan">?</button>
+          <button class="avatar-btn" type="button" id="btnProfileQuick">
+            <span class="avatar-bubble">AI</span>
+            <span id="topbarRoleText">Auditor</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="content">
+        <section id="page-dashboard" class="page">
+          <div class="hero-card">
+            <div class="hero-top">
+              <div class="hero-copy">
+                <span class="eyebrow" id="heroRoleBadge">Ringkasan Risiko</span>
+                <h2 id="heroTitle"></h2>
+                <p id="heroFocus"></p>
+              </div>
+              <div class="button-row">
+                <button type="button" class="btn secondary" data-page-jump="transactions">Impor Laporan</button>
+                <button type="button" class="btn primary" data-page-jump="analysis">Analisis Transaksi</button>
+              </div>
+            </div>
+            <div class="smart-banner" id="smartBanner"></div>
+          </div>
+
+          <div class="summary-grid" id="summaryGrid"></div>
+
+          <div class="content-grid">
+            <div class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Tren Transaksi Berisiko (6 bulan terakhir)</h3>
+                  <p class="section-copy">Visual tren sederhana agar cepat terbaca di mobile dan tetap informatif di laptop.</p>
+                </div>
+                <div class="filter-row">
+                  <span class="chip is-active">Semua Unit</span>
+                  <span class="chip">Komoditas: Semua</span>
+                  <span class="chip">Jenis Risiko: High / All</span>
+                </div>
+              </div>
+              <div id="trendChart" class="trend-grid"></div>
+              <div id="trendTooltip" class="trend-tooltip">24 transaksi berisiko tinggi pada Februari, naik 18% dari bulan sebelumnya.</div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Daftar Anomali Terkini</h3>
+                  <p class="section-copy">Transaksi dengan deviasi dan skor risiko tertinggi untuk prioritas review.</p>
+                </div>
+                <button type="button" class="btn ghost" data-page-jump="analysis">Lihat Semua</button>
+              </div>
+              <div id="recentAlertsList" class="alert-list"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <h3>Quick Actions</h3>
+                <p class="section-copy">Pilih aksi untuk melanjutkan analisis, menangani kasus, atau memeriksa sumber data BPS.</p>
+              </div>
+            </div>
+            <div class="quick-grid">
+              <button type="button" class="quick-action" data-page-jump="transactions">
+                <span class="quick-icon navy">IM</span>
+                <span class="quick-title">Impor Laporan</span>
+                <span class="quick-copy">Unggah Excel/CSV atau pakai dataset demo.</span>
+              </button>
+              <button type="button" class="quick-action" data-page-jump="analysis">
+                <span class="quick-icon teal">AN</span>
+                <span class="quick-title">Analisis Transaksi</span>
+                <span class="quick-copy">Lihat deviasi, skor risiko, dan perbandingan harga.</span>
+              </button>
+              <button type="button" class="quick-action" data-page-jump="cases">
+                <span class="quick-icon orange">KS</span>
+                <span class="quick-title">Kasus Investigasi</span>
+                <span class="quick-copy">Buat kasus dari alert prioritas tinggi.</span>
+              </button>
+              <button type="button" class="quick-action" data-page-jump="profile">
+                <span class="quick-icon green">BP</span>
+                <span class="quick-title">Panel Sumber BPS</span>
+                <span class="quick-copy">Buka landing page resmi dan file contoh.</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section id="page-transactions" class="page">
+          <div class="hero-card">
+            <div class="hero-top">
+              <div class="hero-copy">
+                <span class="eyebrow">Transaksi</span>
+                <h2>Impor, preview, dan mapping data sebelum analisis.</h2>
+                <p>Cari komoditas BPS yang paling sesuai untuk setiap barang pada laporan. Pemetaan yang tepat akan meningkatkan akurasi analisis harga.</p>
+              </div>
+              <div class="button-row">
+                <a class="btn secondary" href="samples/panutanku_sample_import.csv" download>Unduh CSV Sample</a>
+                <a class="btn secondary" href="samples/panutanku_sample_data.xlsx" download>Unduh Workbook Demo</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="transactions-grid">
+            <div class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Impor Laporan</h3>
+                  <p class="section-copy">Prototype menerima file CSV untuk preview langsung. File Excel dapat digunakan sebagai acuan demo dan trust flow.</p>
+                </div>
+              </div>
+              <div class="upload-box">
+                <input id="importInput" class="upload-input" type="file" accept=".csv,.xlsx,.xls" aria-label="Unggah file transaksi">
+                <div class="button-row">
+                  <button type="button" id="btnUseDemoRows" class="btn primary">Gunakan Dataset Demo</button>
+                  <button type="button" id="btnSimulateAnalysis" class="btn secondary">Simulasikan Analisis</button>
+                </div>
+                <div class="microcopy">Format yang tersedia di paket ini: CSV impor, CSV mapping, registry sumber BPS, skenario uji, dan workbook `.xlsx`.</div>
+              </div>
+              <div id="importStateBox" class="status-panel empty">
+                <strong>Belum ada transaksi yang dianalisis.</strong>
+                <span>Mulai dengan mengimpor laporan atau gunakan dataset demo untuk melihat preview data.</span>
+              </div>
+              <div id="importPreviewContainer" class="table-wrap hidden"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Queue Mapping Komoditas</h3>
+                  <p class="section-copy">Item yang belum sepenuhnya dipadankan akan ditandai untuk review atau mapping manual.</p>
+                </div>
+                <a class="btn ghost" href="samples/panutanku_sample_mapping.csv" download>Unduh file mapping</a>
+              </div>
+              <div id="mappingTable" class="table-wrap"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <h3>Galeri State UI</h3>
+                <p class="section-copy">Contoh loading, empty, success, dan error untuk memastikan feedback sistem selalu jelas.</p>
+              </div>
+            </div>
+            <div class="state-grid">
+              <div class="state-card">
+                <h4>Loading state</h4>
+                <div class="status-panel loading">
+                  <div class="skeleton-row"></div>
+                  <div class="skeleton-row" style="width:86%;"></div>
+                  <div class="skeleton-row" style="width:72%;"></div>
+                </div>
+                <small>Sedang memuat ringkasan risiko... Mohon tunggu sebentar.</small>
+              </div>
+              <div class="state-card">
+                <h4>Empty state</h4>
+                <div class="status-panel empty">
+                  <strong>Belum ada kasus aktif saat ini.</strong>
+                  <span>Buat kasus dari hasil analisis untuk memulai tindak lanjut.</span>
+                </div>
+                <small>Empty state tetap mengarahkan ke aksi berikutnya.</small>
+              </div>
+              <div class="state-card">
+                <h4>Success state</h4>
+                <div class="status-panel success">
+                  <strong>Mapping komoditas berhasil disimpan.</strong>
+                  <span>Data siap diteruskan ke modul analisis transaksi.</span>
+                </div>
+                <small>Gunakan state ini setelah pengguna menyelesaikan aksi penting.</small>
+              </div>
+              <div class="state-card">
+                <h4>Error state</h4>
+                <div class="status-panel error">
+                  <strong>File tidak dapat diproses.</strong>
+                  <span>Periksa format dan isi file, lalu coba lagi.</span>
+                </div>
+                <small>Pesan error menjelaskan masalah sekaligus langkah lanjutannya.</small>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="page-analysis" class="page">
+          <div class="hero-card">
+            <div class="hero-top">
+              <div class="hero-copy">
+                <span class="eyebrow">Analisis</span>
+                <h2>Dari data menjadi tindak lanjut yang lebih terarah.</h2>
+                <p>Sistem menghitung deviasi harga, memberi skor risiko, dan menandai transaksi yang tidak wajar agar Anda fokus pada kasus prioritas.</p>
+              </div>
+              <div class="filter-row">
+                <button type="button" class="chip risk-filter is-active" data-risk="All">Semua</button>
+                <button type="button" class="chip risk-filter" data-risk="High">High</button>
+                <button type="button" class="chip risk-filter" data-risk="Medium">Medium</button>
+                <button type="button" class="chip risk-filter" data-risk="Low">Low</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="analysis-layout">
+            <div class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Daftar Transaksi Berisiko</h3>
+                  <p class="section-copy">Tap salah satu transaksi untuk melihat perbandingan harga, sumber BPS, dan rekomendasi tindak lanjut.</p>
+                </div>
+              </div>
+              <div id="analysisList" class="analysis-list"></div>
+            </div>
+
+            <div class="detail-grid">
+              <div class="card">
+                <div class="card-head">
+                  <div>
+                    <h3>Detail Analisis Transaksi</h3>
+                    <p class="section-copy">Harga referensi pada perhitungan adalah data simulasi untuk demo; panel sumber mengarah ke publikasi resmi BPS.</p>
+                  </div>
+                </div>
+                <div id="analysisDetail"></div>
+              </div>
+
+              <div class="card">
+                <div class="card-head">
+                  <div>
+                    <h3>Panel Sumber Data BPS</h3>
+                    <p class="section-copy">Landing page resmi, metadata publikasi, dan contoh tombol unduh PDF untuk trust layer aplikasi.</p>
+                  </div>
+                  <a class="btn ghost" href="samples/panutanku_sample_bps_sources.csv" download>Unduh registry</a>
+                </div>
+                <div id="sourcePanel" class="source-stack"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="page-cases" class="page">
+          <div class="hero-card">
+            <div class="hero-top">
+              <div class="hero-copy">
+                <span class="eyebrow">Kasus</span>
+                <h2>Ubah temuan anomali menjadi investigasi yang terstruktur.</h2>
+                <p>Temuan dari modul analisis dapat langsung diubah menjadi kasus, diteruskan ke verifikasi lapangan, dan dipantau progresnya.</p>
+              </div>
+              <div class="button-row">
+                <button type="button" class="btn primary" id="btnCreateCaseFromSelected">Buat Kasus dari Analisis</button>
+                <button type="button" class="btn secondary" id="btnCreateTaskFromSelected">Minta Verifikasi Lapangan</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="cases-grid">
+            <div class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Kasus Aktif</h3>
+                  <p class="section-copy">Kasus investigasi yang masih berjalan dan belum ditutup.</p>
+                </div>
+              </div>
+              <div id="caseList" class="case-list"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Tugas Verifikasi Lapangan</h3>
+                  <p class="section-copy">Petugas lapangan melihat tugas yang jatuh tempo, lokasi, dan bukti yang perlu dikumpulkan.</p>
+                </div>
+              </div>
+              <div id="taskList" class="task-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="page-profile" class="page">
+          <div class="hero-card">
+            <div class="hero-top">
+              <div class="hero-copy">
+                <span class="eyebrow">Profil & Pengaturan</span>
+                <h2>Personalisasi peran, keamanan, dan paket file uji.</h2>
+                <p>Semua contoh file yang dibutuhkan untuk menguji prototype tersedia di bagian ini.</p>
+              </div>
+              <div class="button-row">
+                <button type="button" class="btn secondary" id="btnResetPrototype">Reset Prototype</button>
+                <button type="button" class="btn primary" id="btnLogoutProfile">Keluar</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-grid">
+            <div class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Personalisasi Beranda per Peran</h3>
+                  <p class="section-copy">Ubah peran untuk melihat bagaimana dashboard beradaptasi bagi auditor, manajer, dan petugas lapangan.</p>
+                </div>
+              </div>
+              <label class="field" for="roleSelect">
+                <span style="font-weight: 700;">Peran aktif</span>
+                <select id="roleSelect" class="profile-select">
+                  <option value="auditor">Auditor</option>
+                  <option value="manager">Manajer</option>
+                  <option value="field">Petugas Lapangan</option>
+                </select>
+              </label>
+              <div class="profile-note">
+                <strong>Keamanan & Privasi</strong>
+                <span>Seluruh data akses, analisis, dan tindak lanjut kasus dikelola dengan kontrol otorisasi sesuai peran pengguna.</span>
+              </div>
+              <div class="profile-note">
+                <strong>Aksesibilitas</strong>
+                <span>Ukuran teks dibuat cukup besar, tombol memiliki area sentuh yang nyaman, dan ikon selalu disertai label agar tetap mudah digunakan di lapangan.</span>
+              </div>
+              <div class="profile-note">
+                <strong>Preview mockup awal</strong>
+                <span>File mockup awal juga ikut disertakan agar mudah dibandingkan dengan prototype HTML yang responsif.</span>
+                <div class="button-row"><a class="btn secondary" href="assets/mockups.png" target="_blank" rel="noopener">Buka mockup</a></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Unduhan & File Uji</h3>
+                  <p class="section-copy">Gunakan file-file ini untuk menguji flow impor, mapping, analisis, sumber BPS, dan skenario end-to-end.</p>
+                </div>
+              </div>
+              <div id="downloadGrid" class="download-grid"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <nav class="mobile-bottom-nav" aria-label="Navigasi utama mobile">
+        <button class="mobile-nav-item" data-page="dashboard"><span class="mobile-icon">B</span><span>Beranda</span></button>
+        <button class="mobile-nav-item" data-page="transactions"><span class="mobile-icon">T</span><span>Transaksi</span></button>
+        <button class="mobile-nav-item" data-page="analysis"><span class="mobile-icon">A</span><span>Analisis</span></button>
+        <button class="mobile-nav-item" data-page="cases"><span class="mobile-icon">K</span><span>Kasus</span></button>
+        <button class="mobile-nav-item" data-page="profile"><span class="mobile-icon">P</span><span>Profil</span></button>
+      </nav>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <script>
+    const SEED = {"app_name": "PANUTANKU 5.0", "generated_for": "Demo UI/UX and functional testing", "note": "Harga referensi demo adalah data simulasi untuk pengujian logika, bukan ekstraksi resmi angka BPS.", "transactions": [{"transaction_id": "TRX-001", "tanggal": "2026-03-12", "unit_kerja": "Unit Umum", "vendor": "CV Maju Jaya Persada", "item_laporan": "Kursi kerja lipat", "spesifikasi": "Besi + sandaran busa", "qty": 30, "satuan": "unit", "harga_satuan_laporan": 1650000, "total_laporan": 49500000, "provinsi": "Riau", "kab_kota": "Pekanbaru", "metode": "Tender Cepat"}, {"transaction_id": "TRX-002", "tanggal": "2026-03-10", "unit_kerja": "Sekretariat", "vendor": "PT Sinar Teknologi", "item_laporan": "Printer inkjet", "spesifikasi": "Warna A4, multifungsi", "qty": 8, "satuan": "unit", "harga_satuan_laporan": 3450000, "total_laporan": 27600000, "provinsi": "DKI Jakarta", "kab_kota": "Jakarta Pusat", "metode": "E-Purchasing"}, {"transaction_id": "TRX-003", "tanggal": "2026-03-09", "unit_kerja": "Operasional", "vendor": "CV Tirta Bersih", "item_laporan": "Air mineral 600 ml", "spesifikasi": "Karton isi 24", "qty": 120, "satuan": "karton", "harga_satuan_laporan": 78000, "total_laporan": 9360000, "provinsi": "Riau", "kab_kota": "Pekanbaru", "metode": "Pengadaan Langsung"}, {"transaction_id": "TRX-004", "tanggal": "2026-03-08", "unit_kerja": "SDM", "vendor": "PT Kertas Nusantara", "item_laporan": "Kertas A4 80 gsm", "spesifikasi": "Rim 500 lembar", "qty": 200, "satuan": "rim", "harga_satuan_laporan": 72000, "total_laporan": 14400000, "provinsi": "Jawa Barat", "kab_kota": "Bandung", "metode": "E-Purchasing"}, {"transaction_id": "TRX-005", "tanggal": "2026-03-06", "unit_kerja": "Logistik", "vendor": "PT Bangun Prima", "item_laporan": "Semen Portland 50 kg", "spesifikasi": "Type I", "qty": 150, "satuan": "zak", "harga_satuan_laporan": 92000, "total_laporan": 13800000, "provinsi": "Jawa Timur", "kab_kota": "Surabaya", "metode": "Tender Cepat"}, {"transaction_id": "TRX-006", "tanggal": "2026-03-06", "unit_kerja": "Gudang", "vendor": "CV Agro Sentosa", "item_laporan": "Beras medium 5 kg", "spesifikasi": "Kemasan retail", "qty": 100, "satuan": "pak", "harga_satuan_laporan": 89000, "total_laporan": 8900000, "provinsi": "Sumatera Utara", "kab_kota": "Medan", "metode": "Pengadaan Langsung"}, {"transaction_id": "TRX-007", "tanggal": "2026-03-05", "unit_kerja": "Konsumsi", "vendor": "CV Pangan Makmur", "item_laporan": "Telur ayam ras", "spesifikasi": "Curah", "qty": 250, "satuan": "kg", "harga_satuan_laporan": 39000, "total_laporan": 9750000, "provinsi": "Riau", "kab_kota": "Pekanbaru", "metode": "Pengadaan Langsung"}, {"transaction_id": "TRX-008", "tanggal": "2026-03-05", "unit_kerja": "Konsumsi", "vendor": "PT Dapur Bersih", "item_laporan": "Minyak goreng 1 liter", "spesifikasi": "Kemasan pouch", "qty": 180, "satuan": "liter", "harga_satuan_laporan": 20500, "total_laporan": 3690000, "provinsi": "Jawa Tengah", "kab_kota": "Semarang", "metode": "E-Purchasing"}, {"transaction_id": "TRX-009", "tanggal": "2026-03-04", "unit_kerja": "Pemeliharaan", "vendor": "PT Warna Sejahtera", "item_laporan": "Cat tembok 5 kg", "spesifikasi": "Interior putih", "qty": 60, "satuan": "pail", "harga_satuan_laporan": 215000, "total_laporan": 12900000, "provinsi": "Riau", "kab_kota": "Pekanbaru", "metode": "Pengadaan Langsung"}, {"transaction_id": "TRX-010", "tanggal": "2026-03-04", "unit_kerja": "Transportasi", "vendor": "PT Energi Karya", "item_laporan": "Solar industri", "spesifikasi": "Pembelian bulk", "qty": 2500, "satuan": "liter", "harga_satuan_laporan": 14800, "total_laporan": 37000000, "provinsi": "Jawa Timur", "kab_kota": "Surabaya", "metode": "Tender Cepat"}, {"transaction_id": "TRX-011", "tanggal": "2026-03-03", "unit_kerja": "Teknologi Informasi", "vendor": "PT Digital Maju", "item_laporan": "Laptop 14 inch", "spesifikasi": "Core i5 RAM 16GB SSD 512GB", "qty": 12, "satuan": "unit", "harga_satuan_laporan": 11250000, "total_laporan": 135000000, "provinsi": "DKI Jakarta", "kab_kota": "Jakarta Selatan", "metode": "E-Catalog"}, {"transaction_id": "TRX-012", "tanggal": "2026-03-03", "unit_kerja": "Teknologi Informasi", "vendor": "CV Data Ringkas", "item_laporan": "Flashdisk 64GB", "spesifikasi": "USB 3.0", "qty": 75, "satuan": "unit", "harga_satuan_laporan": 145000, "total_laporan": 10875000, "provinsi": "Riau", "kab_kota": "Pekanbaru", "metode": "Pengadaan Langsung"}, {"transaction_id": "TRX-013", "tanggal": "2026-03-02", "unit_kerja": "Pelayanan", "vendor": "PT Hygiene Solusi", "item_laporan": "Layanan kebersihan harian", "spesifikasi": "1 bulan / 5 petugas", "qty": 1, "satuan": "paket", "harga_satuan_laporan": 22500000, "total_laporan": 22500000, "provinsi": "Riau", "kab_kota": "Pekanbaru", "metode": "Tender Cepat"}, {"transaction_id": "TRX-014", "tanggal": "2026-03-01", "unit_kerja": "Kesehatan", "vendor": "CV Medika Jaya", "item_laporan": "Masker medis", "spesifikasi": "Box isi 50", "qty": 300, "satuan": "box", "harga_satuan_laporan": 48000, "total_laporan": 14400000, "provinsi": "Jawa Barat", "kab_kota": "Bandung", "metode": "Pengadaan Langsung"}, {"transaction_id": "TRX-015", "tanggal": "2026-02-28", "unit_kerja": "Konsumsi", "vendor": "CV Segar Sentosa", "item_laporan": "Gula pasir", "spesifikasi": "Kemasan 1 kg", "qty": 220, "satuan": "kg", "harga_satuan_laporan": 19200, "total_laporan": 4224000, "provinsi": "Sumatera Barat", "kab_kota": "Padang", "metode": "Pengadaan Langsung"}, {"transaction_id": "TRX-016", "tanggal": "2026-02-27", "unit_kerja": "Konsumsi", "vendor": "CV Protein Nusantara", "item_laporan": "Daging ayam ras", "spesifikasi": "Segar", "qty": 140, "satuan": "kg", "harga_satuan_laporan": 46000, "total_laporan": 6440000, "provinsi": "Riau", "kab_kota": "Pekanbaru", "metode": "Pengadaan Langsung"}, {"transaction_id": "TRX-017", "tanggal": "2026-02-27", "unit_kerja": "Konsumsi", "vendor": "CV Laut Kita", "item_laporan": "Ikan tongkol", "spesifikasi": "Segar", "qty": 100, "satuan": "kg", "harga_satuan_laporan": 68000, "total_laporan": 6800000, "provinsi": "Sulawesi Selatan", "kab_kota": "Makassar", "metode": "Pengadaan Langsung"}, {"transaction_id": "TRX-018", "tanggal": "2026-02-26", "unit_kerja": "Umum", "vendor": "PT Cahaya Lampu", "item_laporan": "Lampu LED 18W", "spesifikasi": "Bohlam", "qty": 180, "satuan": "unit", "harga_satuan_laporan": 42000, "total_laporan": 7560000, "provinsi": "Banten", "kab_kota": "Tangerang", "metode": "E-Purchasing"}], "commodity_mapping": [{"item_laporan": "Kursi kerja lipat", "komoditas_bps": "Kursi kantor lipat", "source_id": "SRC-IHPB-2024", "satuan_referensi": "unit", "harga_referensi_demo": 1000000, "status_mapping": "Mapped", "catatan": "Harga demo untuk uji logika; validasi final tetap menggunakan referensi resmi BPS."}, {"item_laporan": "Printer inkjet", "komoditas_bps": "Printer inkjet A4", "source_id": "SRC-IHPB-2024", "satuan_referensi": "unit", "harga_referensi_demo": 2580000, "status_mapping": "Mapped", "catatan": "Harga demo."}, {"item_laporan": "Air mineral 600 ml", "komoditas_bps": "Air mineral kemasan", "source_id": "SRC-HKN-2024", "satuan_referensi": "karton", "harga_referensi_demo": 66500, "status_mapping": "Mapped", "catatan": "Harga demo."}, {"item_laporan": "Kertas A4 80 gsm", "komoditas_bps": "Kertas HVS A4", "source_id": "SRC-HKN-NON-2024", "satuan_referensi": "rim", "harga_referensi_demo": 61000, "status_mapping": "Mapped", "catatan": "Harga demo."}, {"item_laporan": "Semen Portland 50 kg", "komoditas_bps": "Semen portland", "source_id": "SRC-IHPB-2024", "satuan_referensi": "zak", "harga_referensi_demo": 70000, "status_mapping": "Mapped", "catatan": "Harga demo."}, {"item_laporan": "Beras medium 5 kg", "komoditas_bps": "Beras medium", "source_id": "SRC-HKN-2024", "satuan_referensi": "pak", "harga_referensi_demo": 76000, "status_mapping": "Mapped", "catatan": "Harga demo."}, {"item_laporan": "Telur ayam ras", "komoditas_bps": "Telur ayam ras", "source_id": "SRC-HKN-2024", "satuan_referensi": "kg", "harga_referensi_demo": 30000, "status_mapping": "Mapped", "catatan": "Harga demo."}, {"item_laporan": "Minyak goreng 1 liter", "komoditas_bps": "Minyak goreng kemasan", "source_id": "SRC-HKN-2024", "satuan_referensi": "liter", "harga_referensi_demo": 16800, "status_mapping": "Mapped", "catatan": "Harga demo."}, {"item_laporan": "Cat tembok 5 kg", "komoditas_bps": "Cat tembok interior", "source_id": "SRC-HKN-NON-2024", "satuan_referensi": "pail", "harga_referensi_demo": 175000, "status_mapping": "Mapped", "catatan": "Harga demo."}, {"item_laporan": "Solar industri", "komoditas_bps": "Bahan bakar diesel", "source_id": "SRC-IHPB-2024", "satuan_referensi": "liter", "harga_referensi_demo": 13200, "status_mapping": "Mapped", "catatan": "Harga demo."}, {"item_laporan": "Laptop 14 inch", "komoditas_bps": "", "source_id": "", "satuan_referensi": "unit", "harga_referensi_demo": "", "status_mapping": "Perlu Review", "catatan": "Tidak ada komoditas BPS langsung; gunakan benchmark pembanding tambahan."}, {"item_laporan": "Flashdisk 64GB", "komoditas_bps": "", "source_id": "", "satuan_referensi": "unit", "harga_referensi_demo": "", "status_mapping": "Perlu Review", "catatan": "Belum dipetakan; butuh kamus komoditas internal."}, {"item_laporan": "Layanan kebersihan harian", "komoditas_bps": "Jasa kebersihan", "source_id": "SRC-HKN-NON-2024", "satuan_referensi": "paket", "harga_referensi_demo": 18500000, "status_mapping": "Mapped", "catatan": "Harga demo."}, {"item_laporan": "Masker medis", "komoditas_bps": "Masker medis", "source_id": "SRC-HKN-NON-2024", "satuan_referensi": "box", "harga_referensi_demo": 41000, "status_mapping": "Mapped", "catatan": "Harga demo."}, {"item_laporan": "Gula pasir", "komoditas_bps": "Gula pasir", "source_id": "SRC-HKN-2024", "satuan_referensi": "kg", "harga_referensi_demo": 16500, "status_mapping": "Mapped", "catatan": "Harga demo."}, {"item_laporan": "Daging ayam ras", "komoditas_bps": "Daging ayam ras", "source_id": "SRC-HKN-2024", "satuan_referensi": "kg", "harga_referensi_demo": 36500, "status_mapping": "Mapped", "catatan": "Harga demo."}, {"item_laporan": "Ikan tongkol", "komoditas_bps": "Ikan tongkol/ikan ambu-ambu", "source_id": "SRC-HKN-2024", "satuan_referensi": "kg", "harga_referensi_demo": 56000, "status_mapping": "Mapped", "catatan": "Harga demo."}, {"item_laporan": "Lampu LED 18W", "komoditas_bps": "Lampu LED rumah tangga", "source_id": "SRC-HKN-NON-2024", "satuan_referensi": "unit", "harga_referensi_demo": 35000, "status_mapping": "Mapped", "catatan": "Harga demo."}], "bps_sources": [{"source_id": "SRC-HKN-2024", "judul": "Harga Konsumen Nasional Beberapa Barang dan Jasa 2024", "lingkup": "Nasional", "tipe": "Publikasi", "tanggal_rilis": "16-05-2025", "no_publikasi": "06200.25004", "katalog": "7104009", "landing_page_url": "https://www.bps.go.id/id/publication/2025/05/16/b64f5cbd615a353a2e1588b8/harga-konsumen-nasional-beberapa-barang-dan-jasa-2024.html", "pdf_download_url": "", "download_strategy": "Buka landing page resmi lalu gunakan tombol Unduh Publikasi", "status_verifikasi": "Verified", "catatan": "Halaman resmi BPS pusat."}, {"source_id": "SRC-HKKM-2024", "judul": "Statistik Harga Konsumen Perdesaan Kelompok Makanan 2024", "lingkup": "Nasional", "tipe": "Publikasi", "tanggal_rilis": "22-04-2025", "no_publikasi": "06200.25013", "katalog": "7104016", "landing_page_url": "https://www.bps.go.id/id/publication/2025/04/22/0cb5022723d35dd026455087/statistik-harga-konsumen-perdesaan-kelompok-makanan-2024.html", "pdf_download_url": "", "download_strategy": "Buka landing page resmi lalu gunakan tombol Unduh Publikasi", "status_verifikasi": "Verified", "catatan": "Halaman resmi BPS pusat."}, {"source_id": "SRC-HKN-NON-2024", "judul": "Statistik Harga Konsumen Perdesaan Kelompok Non Makanan 2024", "lingkup": "Nasional", "tipe": "Publikasi", "tanggal_rilis": "22-04-2025", "no_publikasi": "06200.25014", "katalog": "7104017", "landing_page_url": "https://www.bps.go.id/id/publication/2025/04/22/df43ce6249b71abb0f507ba0/statistik-harga-konsumen-perdesaan-kelompok-non-makanan-2024.html", "pdf_download_url": "", "download_strategy": "Buka landing page resmi lalu gunakan tombol Unduh Publikasi", "status_verifikasi": "Verified", "catatan": "Halaman resmi BPS pusat."}, {"source_id": "SRC-IHP-2024", "judul": "Indeks Harga Produsen Indonesia 2024", "lingkup": "Nasional", "tipe": "Publikasi", "tanggal_rilis": "20-05-2025", "no_publikasi": "06200.25018", "katalog": "7102045", "landing_page_url": "https://www.bps.go.id/id/publication/2025/05/20/1edaa8b05c2939ceb4f2cb87/indonesian-producer-price-index-2024.html", "pdf_download_url": "https://web-api.bps.go.id/download.php?f=5LqSW5k9BALdCc6FR8OJxTBmMTdyRnRJVno1MnAvQnBRb20zYWxRY1hKdStBOWpsNGJCYWp3QkxVTWVvVlo0SFI1eDlidUhqekVjZ3BLaHVEaDVZdmFSUU5hU280U2ZEaVpLcUNCZDBmTjEzU1NINzVMZCthWURqUHNNQ0JITjJOZjlMMmhxQ0xJbHB1ZHdkbXdabnZERlM2OHlQajd5a3VBUlR3YXZSMXZxVEFkUW5CK1JmRmRrbzFHQjIyWnAxSEc4SVlhSlFlRTVqOG0xazlxRTdqWTBaL0tIYjNscDJpSFcrTnZ3NWZOYm5UVW5UZHRFWWFDZmdoR1ZpZ1lnem5SNytyLy9MYUk4Y3pjNGc%3D", "download_strategy": "Direct PDF verified", "status_verifikasi": "Verified", "catatan": "Contoh tautan unduh PDF aktif saat verifikasi."}, {"source_id": "SRC-GABAH-2024", "judul": "Statistik Harga Produsen Gabah di Indonesia 2024", "lingkup": "Nasional", "tipe": "Publikasi", "tanggal_rilis": "30-04-2025", "no_publikasi": "06200.25016", "katalog": "7103005", "landing_page_url": "https://www.bps.go.id/assets/publication/2025/04/30/4035c348dbe8c37a15638762/statistik-harga-produsen-gabah-di-indonesia-2024.html", "pdf_download_url": "https://web-api.bps.go.id/download.php?f=3UkMrSCii56iv73AirKN+3hmRkx6Mm1GV0hrU0xFZHF6eDBwZ3Eya2p4UERXNWwxZjZiemltdlZFdHVhVnowbVB4UHdXN3hvSG81TmpkamwvZUNOYTQ2QTZXSnZ4Rnh1WFMzdWpiTG40OGxlV29uT1ZqYXdZanA1QUczR3BvQ2VEV1RqZU5ScVFua0NQSHdRZk1zSnNVZXBSTitESGdVYkVVMVlWS3R0b3hoS0d6QXRVcnZ3NnhKYVhndzcrNlFqWm4rL2dIYTRaWlRGMEtwNWZOblMvblpRelNUS1d3d2pONkMzQW0rT0kzb1p1VVlMVmM3UEY2WGJXdnJTL3dWWFdIY0dpNFlSeER5YXJtOXhnTzJ4VUwremhoTEsvRlpkVGJjVjhnPT0%3D", "download_strategy": "Direct PDF verified", "status_verifikasi": "Verified", "catatan": "Contoh tautan unduh PDF aktif saat verifikasi."}, {"source_id": "SRC-IHPB-2024", "judul": "Indeks Harga Perdagangan Besar Indonesia (2018=100) Tahun 2024", "lingkup": "Nasional", "tipe": "Publikasi", "tanggal_rilis": "22-04-2025", "no_publikasi": "06200.25003", "katalog": "7102018", "landing_page_url": "https://www.bps.go.id/id/publication/2025/04/22/7e474af3513df453abc4a765/indeks-harga-perdagangan-besar-indonesia-2018-100-tahun-2024.html", "pdf_download_url": "", "download_strategy": "Buka landing page resmi lalu gunakan tombol Unduh Publikasi", "status_verifikasi": "Verified", "catatan": "Halaman resmi BPS pusat."}, {"source_id": "SRC-RIAU-FOOD-2024", "judul": "Statistik Harga Konsumen Perdesaan Kelompok Makanan Provinsi Riau 2024", "lingkup": "Provinsi Riau", "tipe": "Publikasi", "tanggal_rilis": "24-12-2025", "no_publikasi": "14000.25058", "katalog": "7104016.14", "landing_page_url": "https://riau.bps.go.id/en/publication/2025/12/24/275f3a10399c28cf19860df6/statistik-harga-konsumen-perdesaan-kelompok-makanan-provinsi-riau-2024.html", "pdf_download_url": "https://web-api.bps.go.id/download.php?f=ERDM231LyyuNO04aDcZZ8TA1cEtpdnV1aHcxL2tuMHdYTFU1US9KWmJqcnU5VStDMExZTno1NlNqaitGUVg5M2VsNXRma0xTUWRzRkp2Q3RJYWNQbVpPTURTbkVlWTMxWFVxbzZraTU1akhhVW1aOVZFK2xWTHN3RVpMNy9hVnJJdlVKalVpYWlmWERMU1QyOU5SWG5iNHcwcXVIc2Nid2Zabi9QYVdrQ2ZuemRSWnJSRklVbkZYeFhtYm1tVlhob29LT2RoOHE2Wkx1OTd3Z240ck0vUHBURW5SMDJjSk9waVR2UC9LWHFqRmF4Wm5wTnUwQS80OWxDYVZld1FOVkNSWDlJUVEvb0dDbW5VbnFiTC9VQzlBNnYvdk43OVNwWlRRK1hFcllFeEtDbmxoNHJrQ214WCsxb3JjPQ%3D%3D", "download_strategy": "Direct PDF verified", "status_verifikasi": "Verified", "catatan": "Contoh publikasi BPS daerah."}, {"source_id": "SRC-RIAU-NON-2024", "judul": "Statistik Harga Konsumen Perdesaan Kelompok Non Makanan Provinsi Riau 2024", "lingkup": "Provinsi Riau", "tipe": "Publikasi", "tanggal_rilis": "24-12-2025", "no_publikasi": "14000.25059", "katalog": "7104017.14", "landing_page_url": "https://riau.bps.go.id/id/publication/2025/12/24/d23b7719d4330e389ffa4647/statistik-harga-konsumen-perdesaan-kelompok-non-makanan-provinsi-riau-2024.html", "pdf_download_url": "", "download_strategy": "Buka landing page resmi lalu gunakan tombol Unduh Publikasi", "status_verifikasi": "Verified", "catatan": "Contoh publikasi BPS daerah."}, {"source_id": "SRC-RIAU-PROD-2024", "judul": "Statistik Harga Produsen Pertanian Provinsi Riau 2024", "lingkup": "Provinsi Riau", "tipe": "Publikasi", "tanggal_rilis": "21-07-2025", "no_publikasi": "14000.25032", "katalog": "7103014.14", "landing_page_url": "https://riau.bps.go.id/id/publication/2025/07/21/e49d37ac8a099fb1c2fe103f/statistik-harga-produsen-pertanian-provinsi-riau-2024.html", "pdf_download_url": "", "download_strategy": "Buka landing page resmi lalu gunakan tombol Unduh Publikasi", "status_verifikasi": "Verified", "catatan": "Contoh publikasi BPS daerah."}], "test_scenarios": [{"scenario_id": "SCN-01", "fitur": "Import file Excel/CSV", "file_uji": "panutanku_sample_import.xlsx / .csv", "expected_result": "Data transaksi tampil penuh tanpa error.", "catatan": "Smoke test impor."}, {"scenario_id": "SCN-02", "fitur": "Deteksi item belum dipetakan", "file_uji": "Laptop 14 inch; Flashdisk 64GB", "expected_result": "Status mapping = Perlu Review.", "catatan": "Uji kamus komoditas & workflow review."}, {"scenario_id": "SCN-03", "fitur": "Perhitungan deviasi dan scoring", "file_uji": "TRX-001 / TRX-002 / TRX-006", "expected_result": "Deviasi, potensi mark-up, dan risk level terisi otomatis.", "catatan": "Uji engine analisis."}, {"scenario_id": "SCN-04", "fitur": "Buat kasus dari high risk", "file_uji": "TRX-001", "expected_result": "Tindak lanjut = Buat Kasus.", "catatan": "Uji integrasi modul kasus."}, {"scenario_id": "SCN-05", "fitur": "Verifikasi sumber BPS", "file_uji": "SRC-IHP-2024 / SRC-RIAU-FOOD-2024", "expected_result": "Landing page resmi terbuka; contoh direct PDF tersedia.", "catatan": "Uji trust layer sumber data."}, {"scenario_id": "SCN-06", "fitur": "Responsive prototype mobile & desktop", "file_uji": "panutanku_prototype.html", "expected_result": "Layout menyesuaikan viewport browser.", "catatan": "Uji UI responsif."}]};
+    const ANALYSIS_ITEMS = [{"transaction_id": "TRX-001", "reference_price": 1000000, "risk": "High", "score": 95, "source_ids": ["SRC-HKN-2024", "SRC-IHPB-2024"], "commodity": "Furnitur / kursi", "unit_note": "Perlu pembanding vendor furnitur lokal", "anomaly_note": "Harga laporan 65% di atas harga pembanding demo.", "follow_up": "Buat Kasus", "deviation_pct": 65.0, "potential_markup": 19500000, "date_label": "2026-03-12", "item": "Kursi kerja lipat", "unit": "Unit Umum", "vendor": "CV Maju Jaya Persada", "region": "Pekanbaru, Riau", "reported_price": 1650000, "qty": 30, "method": "Tender Cepat", "badge_tone": "danger", "deviation_text": "+65.0%"}, {"transaction_id": "TRX-002", "reference_price": 2650000, "risk": "Medium", "score": 78, "source_ids": ["SRC-IHPB-2024", "SRC-IHP-2024"], "commodity": "Perangkat kantor / printer", "unit_note": "Spesifikasi perlu dipadankan lebih rinci", "anomaly_note": "Perlu validasi spesifikasi cartridge dan fungsi scan.", "follow_up": "Review Manual", "deviation_pct": 30.2, "potential_markup": 6400000, "date_label": "2026-03-10", "item": "Printer inkjet", "unit": "Sekretariat", "vendor": "PT Sinar Teknologi", "region": "Jakarta Pusat, DKI Jakarta", "reported_price": 3450000, "qty": 8, "method": "E-Purchasing", "badge_tone": "warning", "deviation_text": "+30.2%"}, {"transaction_id": "TRX-005", "reference_price": 80500, "risk": "Medium", "score": 62, "source_ids": ["SRC-IHPB-2024", "SRC-IHP-2024"], "commodity": "Bahan bangunan / semen", "unit_note": "Bandingkan antar toko material wilayah Surabaya", "anomaly_note": "Masih dalam zona waspada, butuh pembanding pasar.", "follow_up": "Minta Verifikasi Lapangan", "deviation_pct": 14.3, "potential_markup": 1725000, "date_label": "2026-03-06", "item": "Semen Portland 50 kg", "unit": "Logistik", "vendor": "PT Bangun Prima", "region": "Surabaya, Jawa Timur", "reported_price": 92000, "qty": 150, "method": "Tender Cepat", "badge_tone": "warning", "deviation_text": "+14.3%"}, {"transaction_id": "TRX-006", "reference_price": 75500, "risk": "Medium", "score": 67, "source_ids": ["SRC-HKN-2024", "SRC-HKKM-2024"], "commodity": "Beras medium", "unit_note": "Gunakan pembanding Medan sesuai periode pembelian", "anomaly_note": "Selisih 17.9% perlu diuji terhadap kualitas kemasan.", "follow_up": "Minta Verifikasi Lapangan", "deviation_pct": 17.9, "potential_markup": 1350000, "date_label": "2026-03-06", "item": "Beras medium 5 kg", "unit": "Gudang", "vendor": "CV Agro Sentosa", "region": "Medan, Sumatera Utara", "reported_price": 89000, "qty": 100, "method": "Pengadaan Langsung", "badge_tone": "warning", "deviation_text": "+17.9%"}, {"transaction_id": "TRX-007", "reference_price": 31900, "risk": "Medium", "score": 71, "source_ids": ["SRC-RIAU-FOOD-2024", "SRC-HKKM-2024"], "commodity": "Telur ayam ras", "unit_note": "Cocokkan dengan harga pasar Kota Pekanbaru", "anomaly_note": "Selisih 22.3% memerlukan bukti lapangan dari pedagang.", "follow_up": "Minta Verifikasi Lapangan", "deviation_pct": 22.3, "potential_markup": 1775000, "date_label": "2026-03-05", "item": "Telur ayam ras", "unit": "Konsumsi", "vendor": "CV Pangan Makmur", "region": "Pekanbaru, Riau", "reported_price": 39000, "qty": 250, "method": "Pengadaan Langsung", "badge_tone": "warning", "deviation_text": "+22.3%"}, {"transaction_id": "TRX-010", "reference_price": 11900, "risk": "High", "score": 88, "source_ids": ["SRC-IHP-2024", "SRC-IHPB-2024"], "commodity": "Energi / solar industri", "unit_note": "Periksa kontrak volume dan biaya distribusi", "anomaly_note": "Kenaikan 24.4% signifikan pada volume besar.", "follow_up": "Buat Kasus", "deviation_pct": 24.4, "potential_markup": 7250000, "date_label": "2026-03-04", "item": "Solar industri", "unit": "Transportasi", "vendor": "PT Energi Karya", "region": "Surabaya, Jawa Timur", "reported_price": 14800, "qty": 2500, "method": "Tender Cepat", "badge_tone": "danger", "deviation_text": "+24.4%"}, {"transaction_id": "TRX-015", "reference_price": 17100, "risk": "Low", "score": 46, "source_ids": ["SRC-HKN-2024", "SRC-HKKM-2024"], "commodity": "Gula pasir", "unit_note": "Pantau namun belum prioritas", "anomaly_note": "Selisih tipis dan masih butuh pembacaan tren 3 bulan.", "follow_up": "Monitor", "deviation_pct": 12.3, "potential_markup": 462000, "date_label": "2026-02-28", "item": "Gula pasir", "unit": "Konsumsi", "vendor": "CV Segar Sentosa", "region": "Padang, Sumatera Barat", "reported_price": 19200, "qty": 220, "method": "Pengadaan Langsung", "badge_tone": "success", "deviation_text": "+12.3%"}, {"transaction_id": "TRX-016", "reference_price": 39500, "risk": "Medium", "score": 64, "source_ids": ["SRC-RIAU-FOOD-2024", "SRC-HKKM-2024"], "commodity": "Daging ayam ras", "unit_note": "Lakukan sampling harga di dua pasar pembanding", "anomaly_note": "Deviasi 16.5% layak dianalisis lanjutan.", "follow_up": "Minta Verifikasi Lapangan", "deviation_pct": 16.5, "potential_markup": 910000, "date_label": "2026-02-27", "item": "Daging ayam ras", "unit": "Konsumsi", "vendor": "CV Protein Nusantara", "region": "Pekanbaru, Riau", "reported_price": 46000, "qty": 140, "method": "Pengadaan Langsung", "badge_tone": "warning", "deviation_text": "+16.5%"}];
+    const MAPPING_QUEUE = [{"item": "Laptop 14 inch", "candidate": "Laptop / notebook portable", "status": "Perlu Review", "reason": "Spesifikasi terlalu detail; butuh klasifikasi harga yang lebih spesifik."}, {"item": "Flashdisk 64GB", "candidate": "Media penyimpanan elektronik", "status": "Perlu Review", "reason": "Belum ada pasangan komoditas yang cukup akurat di kamus demo."}, {"item": "Layanan kebersihan harian", "candidate": "Jasa kebersihan / kontrak layanan", "status": "Manual Mapping", "reason": "Perlu referensi jasa berdasarkan kontrak, bukan harga eceran."}, {"item": "Kursi kerja lipat", "candidate": "Furnitur kantor sederhana", "status": "Mapped", "reason": "Sudah dipetakan ke pembanding demo furnitur."}, {"item": "Telur ayam ras", "candidate": "Telur ayam ras / pangan", "status": "Mapped", "reason": "Menggunakan sumber BPS harga pangan Riau."}];
+    const SOURCE_CARDS = [{"source_id": "SRC-HKN-2024", "judul": "Harga Konsumen Nasional Beberapa Barang dan Jasa 2024", "lingkup": "Nasional", "tanggal_rilis": "16-05-2025", "landing_page_url": "https://www.bps.go.id/id/publication/2025/05/16/b64f5cbd615a353a2e1588b8/harga-konsumen-nasional-beberapa-barang-dan-jasa-2024.html", "pdf_download_url": "", "download_strategy": "Buka landing page resmi lalu gunakan tombol Unduh Publikasi", "status_verifikasi": "Verified", "katalog": "7104009", "no_publikasi": "06200.25004", "catatan": "Halaman resmi BPS pusat."}, {"source_id": "SRC-IHP-2024", "judul": "Indeks Harga Produsen Indonesia 2024", "lingkup": "Nasional", "tanggal_rilis": "20-05-2025", "landing_page_url": "https://www.bps.go.id/id/publication/2025/05/20/1edaa8b05c2939ceb4f2cb87/indonesian-producer-price-index-2024.html", "pdf_download_url": "https://web-api.bps.go.id/download.php?f=5LqSW5k9BALdCc6FR8OJxTBmMTdyRnRJVno1MnAvQnBRb20zYWxRY1hKdStBOWpsNGJCYWp3QkxVTWVvVlo0SFI1eDlidUhqekVjZ3BLaHVEaDVZdmFSUU5hU280U2ZEaVpLcUNCZDBmTjEzU1NINzVMZCthWURqUHNNQ0JITjJOZjlMMmhxQ0xJbHB1ZHdkbXdabnZERlM2OHlQajd5a3VBUlR3YXZSMXZxVEFkUW5CK1JmRmRrbzFHQjIyWnAxSEc4SVlhSlFlRTVqOG0xazlxRTdqWTBaL0tIYjNscDJpSFcrTnZ3NWZOYm5UVW5UZHRFWWFDZmdoR1ZpZ1lnem5SNytyLy9MYUk4Y3pjNGc%3D", "download_strategy": "Direct PDF verified", "status_verifikasi": "Verified", "katalog": "7102045", "no_publikasi": "06200.25018", "catatan": "Contoh tautan unduh PDF aktif saat verifikasi."}, {"source_id": "SRC-IHPB-2024", "judul": "Indeks Harga Perdagangan Besar Indonesia (2018=100) Tahun 2024", "lingkup": "Nasional", "tanggal_rilis": "22-04-2025", "landing_page_url": "https://www.bps.go.id/id/publication/2025/04/22/7e474af3513df453abc4a765/indeks-harga-perdagangan-besar-indonesia-2018-100-tahun-2024.html", "pdf_download_url": "", "download_strategy": "Buka landing page resmi lalu gunakan tombol Unduh Publikasi", "status_verifikasi": "Verified", "katalog": "7102018", "no_publikasi": "06200.25003", "catatan": "Halaman resmi BPS pusat."}, {"source_id": "SRC-RIAU-FOOD-2024", "judul": "Statistik Harga Konsumen Perdesaan Kelompok Makanan Provinsi Riau 2024", "lingkup": "Provinsi Riau", "tanggal_rilis": "24-12-2025", "landing_page_url": "https://riau.bps.go.id/en/publication/2025/12/24/275f3a10399c28cf19860df6/statistik-harga-konsumen-perdesaan-kelompok-makanan-provinsi-riau-2024.html", "pdf_download_url": "https://web-api.bps.go.id/download.php?f=ERDM231LyyuNO04aDcZZ8TA1cEtpdnV1aHcxL2tuMHdYTFU1US9KWmJqcnU5VStDMExZTno1NlNqaitGUVg5M2VsNXRma0xTUWRzRkp2Q3RJYWNQbVpPTURTbkVlWTMxWFVxbzZraTU1akhhVW1aOVZFK2xWTHN3RVpMNy9hVnJJdlVKalVpYWlmWERMU1QyOU5SWG5iNHcwcXVIc2Nid2Zabi9QYVdrQ2ZuemRSWnJSRklVbkZYeFhtYm1tVlhob29LT2RoOHE2Wkx1OTd3Z240ck0vUHBURW5SMDJjSk9waVR2UC9LWHFqRmF4Wm5wTnUwQS80OWxDYVZld1FOVkNSWDlJUVEvb0dDbW5VbnFiTC9VQzlBNnYvdk43OVNwWlRRK1hFcllFeEtDbmxoNHJrQ214WCsxb3JjPQ%3D%3D", "download_strategy": "Direct PDF verified", "status_verifikasi": "Verified", "katalog": "7104016.14", "no_publikasi": "14000.25058", "catatan": "Contoh publikasi BPS daerah."}, {"source_id": "SRC-RIAU-NON-2024", "judul": "Statistik Harga Konsumen Perdesaan Kelompok Non Makanan Provinsi Riau 2024", "lingkup": "Provinsi Riau", "tanggal_rilis": "24-12-2025", "landing_page_url": "https://riau.bps.go.id/id/publication/2025/12/24/d23b7719d4330e389ffa4647/statistik-harga-konsumen-perdesaan-kelompok-non-makanan-provinsi-riau-2024.html", "pdf_download_url": "", "download_strategy": "Buka landing page resmi lalu gunakan tombol Unduh Publikasi", "status_verifikasi": "Verified", "katalog": "7104017.14", "no_publikasi": "14000.25059", "catatan": "Contoh publikasi BPS daerah."}];
+    const ROLE_CONFIG = {"auditor": {"roleLabel": "Auditor", "heroTitle": "Pantau transaksi, temukan anomali, dan tindak lanjuti kasus dari satu layar utama.", "focusNote": "Fokus hari ini: 12 alert baru menunggu review awal.", "banner": "Peringatan: peningkatan 3x transaksi berisiko tinggi di Unit Umum minggu ini.", "metrics": [{"label": "Total Transaksi Dianalisis", "value": "1.248", "tone": "navy", "helper": "Periode berjalan"}, {"label": "Transaksi Berisiko Tinggi", "value": "87", "tone": "orange", "helper": "Perlu prioritas review"}, {"label": "Estimasi Potensi Mark-up", "value": "Rp472 jt", "tone": "teal", "helper": "Indikasi awal"}, {"label": "Kasus Aktif", "value": "14", "tone": "green", "helper": "Belum ditutup"}]}, "manager": {"roleLabel": "Manajer", "heroTitle": "Amati tren risiko dan estimasi potensi kerugian untuk menentukan prioritas pengawasan.", "focusNote": "Fokus hari ini: 4 unit kerja membutuhkan supervisi.", "banner": "Manajemen: 3 unit kerja menyumbang 61% potensi mark-up bulan ini.", "metrics": [{"label": "Total Transaksi Dianalisis", "value": "1.248", "tone": "navy", "helper": "Periode berjalan"}, {"label": "Unit Prioritas", "value": "6", "tone": "orange", "helper": "Skor risiko tertinggi"}, {"label": "Potensi Kerugian Tertaksir", "value": "Rp472 jt", "tone": "teal", "helper": "Butuh review lanjutan"}, {"label": "Kasus Aktif", "value": "14", "tone": "green", "helper": "Sedang dipantau"}]}, "field": {"roleLabel": "Petugas Lapangan", "heroTitle": "Prioritaskan tugas verifikasi lapangan dan kumpulkan bukti harga dari pasar secara cepat.", "focusNote": "Fokus hari ini: siapkan foto bukti, vendor pembanding, dan catatan lokasi.", "banner": "Tugas hari ini: 2 verifikasi jatuh tempo sebelum pukul 16.00.", "metrics": [{"label": "Tugas Verifikasi Hari Ini", "value": "9", "tone": "navy", "helper": "Perlu tindakan cepat"}, {"label": "Prioritas High Risk", "value": "3", "tone": "orange", "helper": "Harus dikunjungi"}, {"label": "Bukti Lapangan Terkumpul", "value": "21", "tone": "teal", "helper": "Foto & catatan"}, {"label": "Kasus yang Didukung", "value": "14", "tone": "green", "helper": "Dalam progres"}]}};
+    const CASES = [{"case_id": "KAS-101", "title": "Indikasi mark-up kursi kerja lipat", "priority": "High", "status": "Menunggu verifikasi lapangan", "owner": "Auditor Internal", "due": "18 Mar 2026", "summary": "Bandingkan tiga vendor lokal dan kumpulkan bukti harga pasar.", "transaction_id": "TRX-001"}, {"case_id": "KAS-102", "title": "Review harga solar industri", "priority": "High", "status": "Analisis lanjutan", "owner": "Tim Fraud Analytics", "due": "19 Mar 2026", "summary": "Uji komponen distribusi, volume, dan kontrak pemasok.", "transaction_id": "TRX-010"}, {"case_id": "KAS-103", "title": "Verifikasi harga telur ayam ras", "priority": "Medium", "status": "Tugas lapangan dikirim", "owner": "Koordinator Wilayah Riau", "due": "17 Mar 2026", "summary": "Cocokkan harga dengan dua pasar pembanding di Pekanbaru.", "transaction_id": "TRX-007"}];
+    const TASKS = [{"task_id": "TSK-201", "title": "Ambil foto harga telur ayam ras", "location": "Pasar Sukaramai, Pekanbaru", "assignee": "Tim Lapangan Riau", "due": "Hari ini 14:00", "status": "Perlu bukti foto"}, {"task_id": "TSK-202", "title": "Cek pembanding solar industri", "location": "Surabaya", "assignee": "Tim Lapangan Jatim", "due": "Besok 10:00", "status": "Menunggu konfirmasi vendor"}, {"task_id": "TSK-203", "title": "Validasi kualitas beras medium 5 kg", "location": "Medan", "assignee": "Petugas Regional Sumut", "due": "18 Mar 2026", "status": "Terjadwal"}];
+    const TREND = [{"month": "Sep", "count": 18}, {"month": "Okt", "count": 21}, {"month": "Nov", "count": 24}, {"month": "Des", "count": 22}, {"month": "Jan", "count": 26}, {"month": "Feb", "count": 31}];
+    const SAMPLE_ROWS = [{"transaction_id": "TRX-001", "tanggal": "2026-03-12", "unit_kerja": "Unit Umum", "item_laporan": "Kursi kerja lipat", "qty": 30, "harga_satuan_laporan": 1650000, "provinsi": "Riau"}, {"transaction_id": "TRX-002", "tanggal": "2026-03-10", "unit_kerja": "Sekretariat", "item_laporan": "Printer inkjet", "qty": 8, "harga_satuan_laporan": 3450000, "provinsi": "DKI Jakarta"}, {"transaction_id": "TRX-003", "tanggal": "2026-03-09", "unit_kerja": "Operasional", "item_laporan": "Air mineral 600 ml", "qty": 120, "harga_satuan_laporan": 78000, "provinsi": "Riau"}, {"transaction_id": "TRX-004", "tanggal": "2026-03-08", "unit_kerja": "SDM", "item_laporan": "Kertas A4 80 gsm", "qty": 200, "harga_satuan_laporan": 72000, "provinsi": "Jawa Barat"}, {"transaction_id": "TRX-005", "tanggal": "2026-03-06", "unit_kerja": "Logistik", "item_laporan": "Semen Portland 50 kg", "qty": 150, "harga_satuan_laporan": 92000, "provinsi": "Jawa Timur"}, {"transaction_id": "TRX-006", "tanggal": "2026-03-06", "unit_kerja": "Gudang", "item_laporan": "Beras medium 5 kg", "qty": 100, "harga_satuan_laporan": 89000, "provinsi": "Sumatera Utara"}];
+    const DOWNLOADS = [{"title": "Workbook sample (.xlsx)", "copy": "Berisi sheet impor, mapping, sumber BPS, analisis demo, dan skenario uji.", "href": "samples/panutanku_sample_data.xlsx", "cta": "Unduh workbook", "tone": "navy", "icon": "XL", "external": false}, {"title": "CSV impor transaksi", "copy": "Contoh file CSV untuk menguji area impor dan preview data.", "href": "samples/panutanku_sample_import.csv", "cta": "Unduh CSV impor", "tone": "teal", "icon": "CV", "external": false}, {"title": "CSV mapping komoditas", "copy": "Contoh pasangan item laporan dengan kamus komoditas.", "href": "samples/panutanku_sample_mapping.csv", "cta": "Unduh CSV mapping", "tone": "orange", "icon": "MP", "external": false}, {"title": "CSV registry sumber BPS", "copy": "Daftar contoh landing page resmi dan PDF unduhan yang disiapkan untuk trust layer.", "href": "samples/panutanku_sample_bps_sources.csv", "cta": "Unduh registry BPS", "tone": "green", "icon": "BP", "external": false}, {"title": "CSV skenario uji", "copy": "Checklist pengujian end-to-end untuk smoke test prototype.", "href": "samples/panutanku_test_scenarios.csv", "cta": "Unduh skenario uji", "tone": "navy", "icon": "TS", "external": false}, {"title": "Demo seed JSON", "copy": "Data seed yang dipakai untuk membangun prototype HTML ini.", "href": "samples/panutanku_demo_seed.json", "cta": "Unduh JSON seed", "tone": "teal", "icon": "JS", "external": false}, {"title": "Mockup visual awal", "copy": "Gambar mockup gabungan untuk dibandingkan dengan hasil prototype responsif.", "href": "assets/mockups.png", "cta": "Buka mockup", "tone": "orange", "icon": "UI", "external": false}, {"title": "Publikasi resmi BPS: Harga Konsumen Nasional 2024", "copy": "Contoh tautan resmi BPS pusat yang ditampilkan juga di panel sumber.", "href": "https://www.bps.go.id/id/publication/2025/05/16/b64f5cbd615a353a2e1588b8/harga-konsumen-nasional-beberapa-barang-dan-jasa-2024.html", "cta": "Buka halaman resmi", "tone": "green", "icon": "LK", "external": true}];
+
+    const onboardingSlides = [
+      {
+        title: 'Bandingkan harga laporan dengan harga wajar BPS',
+        copy: 'Aplikasi ini membantu Anda membandingkan harga pengadaan dengan harga konsumen resmi dari publikasi BPS, per komoditas, wilayah, dan periode.',
+        extra: 'Dengan perbandingan ini, pengguna dapat lebih cepat mengidentifikasi apakah suatu nilai pengadaan masih berada dalam batas kewajaran atau sudah mulai menyimpang dari referensi resmi.',
+        renderIllustration() {
+          return `
+            <div class="illu-bars">
+              <div class="illu-bar-wrap">
+                <div class="illu-bar" style="height: 116px;"></div>
+                <div class="illu-bar-label">Harga Laporan</div>
+              </div>
+              <div class="illu-bar-wrap">
+                <div class="illu-bar teal" style="height: 76px;"></div>
+                <div class="illu-bar-label">Harga BPS</div>
+              </div>
+            </div>`;
+        }
+      },
+      {
+        title: 'Deteksi indikasi mark-up secara otomatis',
+        copy: 'Sistem menghitung deviasi harga, memberi skor risiko, dan menandai transaksi yang tidak wajar sehingga Anda bisa fokus pada kasus prioritas.',
+        extra: 'Pengguna tidak perlu menghitung selisih harga secara manual. Sistem bekerja di belakang layar untuk menilai tingkat risiko dan menampilkan transaksi yang paling membutuhkan perhatian.',
+        renderIllustration() {
+          return `
+            <div class="illu-alerts">
+              <div class="alert-demo-row"><div><strong>Kursi kerja lipat</strong><br><span class="alert-meta">Deviasi +65%</span></div><span class="mini-badge high">High</span></div>
+              <div class="alert-demo-row"><div><strong>Printer inkjet</strong><br><span class="alert-meta">Deviasi +30%</span></div><span class="mini-badge medium">Medium</span></div>
+              <div class="alert-demo-row"><div><strong>Gula pasir</strong><br><span class="alert-meta">Deviasi +12%</span></div><span class="mini-badge safe">Monitor</span></div>
+            </div>`;
+        }
+      },
+      {
+        title: 'Kelola kasus dan verifikasi di lapangan',
+        copy: 'Ubah temuan anomali menjadi kasus investigasi, kirim tugas verifikasi lapangan, dan kumpulkan bukti langsung dari pasar.',
+        extra: 'Aplikasi tidak berhenti pada analisis. Temuan yang muncul dapat langsung ditindaklanjuti menjadi proses investigasi yang terstruktur dan dapat dipantau progresnya.',
+        renderIllustration() {
+          return `
+            <div class="illu-cases">
+              <div class="case-demo-row"><span class="mini-avatar">KS</span><div><strong>Buat kasus</strong><br><span class="alert-meta">Indikasi mark-up furnitur</span></div><span class="mini-badge high">Baru</span></div>
+              <div class="case-demo-row"><span class="mini-avatar">TG</span><div><strong>Tugas lapangan</strong><br><span class="alert-meta">Ambil bukti harga pasar</span></div><span class="pin-icon"></span></div>
+            </div>`;
+        }
+      }
+    ];
+
+    const state = {
+      currentPage: 'dashboard',
+      role: localStorage.getItem('panutanku_role') || 'auditor',
+      token: localStorage.getItem('panutanku_token') || '',
+      onboardingSeen: localStorage.getItem('panutanku_onboarding') === 'seen',
+      selectedAlertId: ANALYSIS_ITEMS[0]?.transaction_id || '',
+      visibleRisk: 'All',
+      slideIndex: 0,
+      importRows: [],
+      cases: structuredClone(CASES),
+      tasks: structuredClone(TASKS),
+    };
+
+    const pageMeta = {
+      dashboard: {
+        title: 'Beranda',
+        subtitle: 'Pantau transaksi, temukan anomali, dan tindak lanjuti kasus dari satu layar utama.'
+      },
+      transactions: {
+        title: 'Transaksi',
+        subtitle: 'Impor file, cek preview data, dan rapikan mapping komoditas sebelum analisis.'
+      },
+      analysis: {
+        title: 'Analisis',
+        subtitle: 'Lihat deviasi harga, skor risiko, dan panel sumber BPS dari satu modul.'
+      },
+      cases: {
+        title: 'Kasus',
+        subtitle: 'Tindak lanjuti temuan menjadi investigasi dan tugas verifikasi lapangan.'
+      },
+      profile: {
+        title: 'Profil',
+        subtitle: 'Kelola peran, keamanan, dan unduh semua file contoh untuk pengujian.'
+      }
+    };
+
+    const el = {
+      splash: document.getElementById('splash'),
+      viewOnboarding: document.getElementById('view-onboarding'),
+      viewLogin: document.getElementById('view-login'),
+      appShell: document.getElementById('appShell'),
+      onboardingTitle: document.getElementById('onboardingTitle'),
+      onboardingCopy: document.getElementById('onboardingCopy'),
+      onboardingExtra: document.getElementById('onboardingExtra'),
+      onboardingIllustration: document.getElementById('onboardingIllustration'),
+      onboardingDots: document.getElementById('onboardingDots'),
+      btnPrevSlide: document.getElementById('btnPrevSlide'),
+      btnNextSlide: document.getElementById('btnNextSlide'),
+      btnSkipOnboarding: document.getElementById('btnSkipOnboarding'),
+      loginForm: document.getElementById('loginForm'),
+      loginEmail: document.getElementById('loginEmail'),
+      loginPassword: document.getElementById('loginPassword'),
+      loginEmailError: document.getElementById('loginEmailError'),
+      loginPasswordError: document.getElementById('loginPasswordError'),
+      togglePassword: document.getElementById('togglePassword'),
+      topbarTitle: document.getElementById('topbarTitle'),
+      topbarSubtitle: document.getElementById('topbarSubtitle'),
+      topbarRoleText: document.getElementById('topbarRoleText'),
+      heroRoleBadge: document.getElementById('heroRoleBadge'),
+      heroTitle: document.getElementById('heroTitle'),
+      heroFocus: document.getElementById('heroFocus'),
+      smartBanner: document.getElementById('smartBanner'),
+      summaryGrid: document.getElementById('summaryGrid'),
+      trendChart: document.getElementById('trendChart'),
+      trendTooltip: document.getElementById('trendTooltip'),
+      recentAlertsList: document.getElementById('recentAlertsList'),
+      mappingTable: document.getElementById('mappingTable'),
+      importInput: document.getElementById('importInput'),
+      importStateBox: document.getElementById('importStateBox'),
+      importPreviewContainer: document.getElementById('importPreviewContainer'),
+      analysisList: document.getElementById('analysisList'),
+      analysisDetail: document.getElementById('analysisDetail'),
+      sourcePanel: document.getElementById('sourcePanel'),
+      caseList: document.getElementById('caseList'),
+      taskList: document.getElementById('taskList'),
+      sidebarRoleChip: document.getElementById('sidebarRoleChip'),
+      roleSelect: document.getElementById('roleSelect'),
+      downloadGrid: document.getElementById('downloadGrid'),
+      toast: document.getElementById('toast')
+    };
+
+    function formatCurrency(value) {
+      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(value);
+    }
+
+    function formatDate(dateStr) {
+      const [y, m, d] = dateStr.split('-').map(Number);
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+      return `${d} ${months[m - 1]} ${y}`;
+    }
+
+    function getAnalysisItemById(id) {
+      return ANALYSIS_ITEMS.find(item => item.transaction_id === id) || ANALYSIS_ITEMS[0];
+    }
+
+    function setView(viewName) {
+      el.viewOnboarding.classList.add('hidden');
+      el.viewLogin.classList.add('hidden');
+      el.appShell.classList.remove('is-active');
+      if (viewName === 'onboarding') el.viewOnboarding.classList.remove('hidden');
+      if (viewName === 'login') el.viewLogin.classList.remove('hidden');
+      if (viewName === 'app') el.appShell.classList.add('is-active');
+    }
+
+    function showToast(message, tone = 'info') {
+      el.toast.textContent = message;
+      el.toast.className = `toast ${tone}`;
+      el.toast.classList.remove('hidden');
+      clearTimeout(showToast._timer);
+      showToast._timer = setTimeout(() => el.toast.classList.add('hidden'), 2800);
+    }
+
+    function renderOnboarding() {
+      const slide = onboardingSlides[state.slideIndex];
+      el.onboardingTitle.textContent = slide.title;
+      el.onboardingCopy.textContent = slide.copy;
+      el.onboardingExtra.textContent = slide.extra;
+      el.onboardingIllustration.innerHTML = slide.renderIllustration();
+      el.onboardingDots.innerHTML = onboardingSlides.map((_, index) => `<span class="progress-dot ${index === state.slideIndex ? 'is-active' : ''}"></span>`).join('');
+      el.btnPrevSlide.disabled = state.slideIndex === 0;
+      el.btnNextSlide.textContent = state.slideIndex === onboardingSlides.length - 1 ? 'Mulai Sekarang' : 'Lanjut';
+    }
+
+    function completeOnboarding() {
+      localStorage.setItem('panutanku_onboarding', 'seen');
+      state.onboardingSeen = true;
+      setView('login');
+    }
+
+    function validateLogin() {
+      let valid = true;
+      el.loginEmailError.textContent = '';
+      el.loginPasswordError.textContent = '';
+      if (!el.loginEmail.value.trim()) {
+        el.loginEmailError.textContent = 'Email tidak boleh kosong';
+        valid = false;
+      }
+      if (!el.loginPassword.value.trim()) {
+        el.loginPasswordError.textContent = 'Kata sandi tidak boleh kosong';
+        valid = false;
+      }
+      return valid;
+    }
+
+    function loginSuccess(mode = 'demo') {
+      state.token = `demo-token-${mode}`;
+      localStorage.setItem('panutanku_token', state.token);
+      localStorage.setItem('panutanku_role', state.role);
+      showToast('Login berhasil.', 'success');
+      openApp('dashboard');
+    }
+
+    function openApp(page = state.currentPage) {
+      setView('app');
+      state.currentPage = page;
+      applyRole(state.role);
+      renderTrend();
+      renderRecentAlerts();
+      renderMappingQueue();
+      renderImportPreview();
+      renderAnalysisList();
+      renderAnalysisDetail();
+      renderCases();
+      renderDownloads();
+      updatePage(page);
+    }
+
+    function applyRole(role) {
+      state.role = role;
+      localStorage.setItem('panutanku_role', role);
+      const config = ROLE_CONFIG[role];
+      el.heroRoleBadge.textContent = `${config.roleLabel} • Ringkasan Risiko`;
+      el.heroTitle.textContent = config.heroTitle;
+      el.heroFocus.textContent = config.focusNote;
+      el.smartBanner.innerHTML = `<strong>Notifikasi Cerdas</strong><span>${config.banner}</span>`;
+      el.topbarRoleText.textContent = config.roleLabel;
+      el.sidebarRoleChip.textContent = `Peran aktif: ${config.roleLabel}`;
+      el.roleSelect.value = role;
+      el.summaryGrid.innerHTML = config.metrics.map(metric => `
+        <div class="metric-card">
+          <span class="metric-tone ${metric.tone}">${metric.tone === 'navy' ? 'Ringkasan' : metric.tone === 'orange' ? 'Prioritas' : metric.tone === 'teal' ? 'Nilai' : 'Status'}</span>
+          <div class="metric-label">${metric.label}</div>
+          <div class="metric-value">${metric.value}</div>
+          <div class="metric-helper">${metric.helper}</div>
+        </div>
+      `).join('');
+    }
+
+    function updatePage(page) {
+      state.currentPage = page;
+      document.querySelectorAll('.page').forEach(section => {
+        section.classList.toggle('is-active', section.id === `page-${page}`);
+      });
+      document.querySelectorAll('[data-page]').forEach(btn => {
+        btn.classList.toggle('is-active', btn.dataset.page === page);
+      });
+      const meta = pageMeta[page];
+      el.topbarTitle.textContent = meta.title;
+      el.topbarSubtitle.textContent = meta.subtitle;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (page === 'analysis') renderAnalysisDetail();
+      if (page === 'cases') renderCases();
+      if (page === 'profile') renderDownloads();
+    }
+
+    function renderTrend() {
+      const max = Math.max(...TREND.map(item => item.count));
+      el.trendChart.innerHTML = TREND.map((item, idx) => {
+        const prev = idx > 0 ? TREND[idx - 1].count : item.count;
+        const diff = idx === 0 ? 0 : Math.round(((item.count - prev) / prev) * 100);
+        const height = Math.max(30, Math.round(item.count / max * 140));
+        return `
+          <div class="trend-col">
+            <button type="button" class="trend-hit" data-month="${item.month}" data-count="${item.count}" data-diff="${diff}">
+              <div class="trend-bar" style="height:${height}px"></div>
+            </button>
+            <div class="trend-month">${item.month}</div>
+          </div>
+        `;
+      }).join('');
+      el.trendChart.querySelectorAll('.trend-hit').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const diff = Number(btn.dataset.diff);
+          const diffLabel = diff > 0 ? `naik ${diff}%` : diff < 0 ? `turun ${Math.abs(diff)}%` : 'stabil';
+          el.trendTooltip.textContent = `${btn.dataset.count} transaksi berisiko pada ${btn.dataset.month}, ${diffLabel} dari bulan sebelumnya.`;
+        });
+      });
+      const feb = TREND[TREND.length - 1];
+      const jan = TREND[TREND.length - 2];
+      const diff = Math.round(((feb.count - jan.count) / jan.count) * 100);
+      el.trendTooltip.textContent = `${feb.count} transaksi berisiko pada ${feb.month}, naik ${diff}% dari bulan sebelumnya.`;
+    }
+
+    function renderRecentAlerts() {
+      const alerts = ANALYSIS_ITEMS.slice(0, 4);
+      el.recentAlertsList.innerHTML = alerts.map(item => {
+        const tx = SEED.transactions.find(t => t.transaction_id === item.transaction_id);
+        return `
+          <button type="button" class="alert-row" data-alert-jump="${item.transaction_id}">
+            <div class="alert-top">
+              <div>
+                <div class="alert-title">${tx.item_laporan} — Deviasi ${item.deviation_text}</div>
+                <div class="alert-meta">${tx.unit_kerja} • ${formatDate(tx.tanggal)} • ${tx.kab_kota}</div>
+              </div>
+              <span class="risk-badge ${item.badge_tone}">${item.risk}</span>
+            </div>
+            <div class="alert-bottom">
+              <span class="alert-meta">Skor risiko ${item.score}/100</span>
+              <span class="alert-meta">${formatCurrency(item.potential_markup)}</span>
+            </div>
+          </button>
+        `;
+      }).join('');
+      document.querySelectorAll('[data-alert-jump]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.selectedAlertId = btn.dataset.alertJump;
+          renderAnalysisList();
+          renderAnalysisDetail();
+          updatePage('analysis');
+        });
+      });
+    }
+
+    function renderMappingQueue() {
+      el.mappingTable.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Item laporan</th>
+              <th>Kandidat komoditas</th>
+              <th>Status</th>
+              <th>Catatan</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${MAPPING_QUEUE.map(row => `
+              <tr>
+                <td>${row.item}</td>
+                <td>${row.candidate}</td>
+                <td><span class="mapping-status ${row.status === 'Mapped' ? 'mapped' : row.status === 'Perlu Review' ? 'review' : 'manual'}">${row.status}</span></td>
+                <td>${row.reason}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>`;
+    }
+
+    function renderImportPreview() {
+      if (!state.importRows.length) {
+        el.importPreviewContainer.classList.add('hidden');
+        el.importStateBox.className = 'status-panel empty';
+        el.importStateBox.innerHTML = '<strong>Belum ada transaksi yang dianalisis.</strong><span>Mulai dengan mengimpor laporan atau gunakan dataset demo untuk melihat preview data.</span>';
+        return;
+      }
+      el.importStateBox.className = 'status-panel success';
+      el.importStateBox.innerHTML = `<strong>${state.importRows.length} baris siap diproses.</strong><span>Preview data ditampilkan di bawah. Anda dapat melanjutkan ke modul analisis.</span>`;
+      el.importPreviewContainer.classList.remove('hidden');
+      const rows = state.importRows;
+      const headers = Object.keys(rows[0]);
+      el.importPreviewContainer.innerHTML = `
+        <table>
+          <thead>
+            <tr>${headers.map(header => `<th>${header.replaceAll('_', ' ')}</th>`).join('')}</tr>
+          </thead>
+          <tbody>
+            ${rows.map(row => `
+              <tr>${headers.map(header => `<td>${header.includes('harga') ? formatCurrency(Number(row[header])) : row[header]}</td>`).join('')}</tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function parseCSV(text) {
+      const lines = text.trim().split(/\r?\n/).filter(Boolean);
+      if (lines.length < 2) return [];
+      const headers = lines[0].split(',').map(item => item.trim());
+      return lines.slice(1).map(line => {
+        const values = line.split(',');
+        return headers.reduce((acc, header, index) => {
+          acc[header] = (values[index] || '').trim();
+          return acc;
+        }, {});
+      });
+    }
+
+    function renderAnalysisList() {
+      const filtered = state.visibleRisk === 'All'
+        ? ANALYSIS_ITEMS
+        : ANALYSIS_ITEMS.filter(item => item.risk === state.visibleRisk);
+      if (!filtered.find(item => item.transaction_id === state.selectedAlertId)) {
+        state.selectedAlertId = filtered[0]?.transaction_id || ANALYSIS_ITEMS[0].transaction_id;
+      }
+      el.analysisList.innerHTML = filtered.map(item => {
+        const tx = SEED.transactions.find(row => row.transaction_id === item.transaction_id);
+        return `
+          <button type="button" class="analysis-card ${item.transaction_id === state.selectedAlertId ? 'is-selected' : ''}" data-select-analysis="${item.transaction_id}">
+            <div class="alert-top">
+              <div>
+                <div class="alert-title">${tx.item_laporan}</div>
+                <div class="alert-meta">${tx.unit_kerja} • ${formatDate(tx.tanggal)} • ${item.commodity}</div>
+              </div>
+              <span class="risk-badge ${item.badge_tone}">${item.risk}</span>
+            </div>
+            <div class="alert-bottom">
+              <span class="alert-meta">Deviasi ${item.deviation_text}</span>
+              <span class="alert-meta">Skor ${item.score}/100</span>
+            </div>
+          </button>
+        `;
+      }).join('');
+      document.querySelectorAll('[data-select-analysis]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.selectedAlertId = btn.dataset.selectAnalysis;
+          renderAnalysisList();
+          renderAnalysisDetail();
+        });
+      });
+    }
+
+    function renderAnalysisDetail() {
+      const item = getAnalysisItemById(state.selectedAlertId);
+      const maxPrice = Math.max(item.reported_price, item.reference_price);
+      const reportRatio = Math.round(item.reported_price / maxPrice * 100);
+      const refRatio = Math.round(item.reference_price / maxPrice * 100);
+      const tx = SEED.transactions.find(row => row.transaction_id === item.transaction_id);
+      el.analysisDetail.innerHTML = `
+        <div class="compare-grid">
+          <div class="price-card reported" style="min-height:${110 + reportRatio * 0.7}px;">
+            <div class="price-label">Harga laporan</div>
+            <div class="price-value">${formatCurrency(item.reported_price)}</div>
+            <div>${tx.qty} ${tx.satuan} • ${tx.metode}</div>
+          </div>
+          <div class="price-card reference" style="min-height:${110 + refRatio * 0.7}px;">
+            <div class="price-label">Harga referensi BPS</div>
+            <div class="price-value">${formatCurrency(item.reference_price)}</div>
+            <div>${item.region}</div>
+          </div>
+        </div>
+        <div class="compare-footnote">Deviasi <strong>${item.deviation_text}</strong> • Potensi mark-up <strong>${formatCurrency(item.potential_markup)}</strong> • Risk score <strong>${item.score}/100</strong></div>
+        <div class="detail-grid">
+          <div class="risk-panel">
+            <div class="risk-score-row">
+              <div>
+                <div class="section-copy">Ringkasan Risiko</div>
+                <div class="alert-title">${tx.item_laporan}</div>
+                <div class="alert-meta">${tx.vendor}</div>
+              </div>
+              <div class="donut" style="--value:${item.score};">${item.score}</div>
+            </div>
+            <div class="button-row">
+              <button type="button" class="btn warning" id="detailCreateCase">Buat Kasus</button>
+              <button type="button" class="btn secondary" id="detailCreateTask">Minta Verifikasi Lapangan</button>
+            </div>
+          </div>
+          <div class="meta-list">
+            <div class="meta-row"><span class="meta-label">Unit kerja</span><strong>${tx.unit_kerja}</strong></div>
+            <div class="meta-row"><span class="meta-label">Lokasi</span><strong>${item.region}</strong></div>
+            <div class="meta-row"><span class="meta-label">Komoditas</span><strong>${item.commodity}</strong></div>
+            <div class="meta-row"><span class="meta-label">Catatan analisis</span><strong>${item.anomaly_note}</strong></div>
+            <div class="meta-row"><span class="meta-label">Tindak lanjut disarankan</span><strong>${item.follow_up}</strong></div>
+            <div class="meta-row"><span class="meta-label">Catatan unit</span><strong>${item.unit_note}</strong></div>
+          </div>
+        </div>
+      `;
+      document.getElementById('detailCreateCase').addEventListener('click', createCaseFromSelected);
+      document.getElementById('detailCreateTask').addEventListener('click', createTaskFromSelected);
+      renderSourcePanel(item.source_ids);
+    }
+
+    function renderSourcePanel(sourceIds) {
+      const selectedSources = sourceIds.map(id => SOURCE_CARDS.find(src => src.source_id === id)).filter(Boolean);
+      el.sourcePanel.innerHTML = selectedSources.map(source => `
+        <div class="source-item">
+          <div class="case-top">
+            <div>
+              <div class="case-title">${source.judul}</div>
+              <div class="source-meta">
+                <span>${source.lingkup}</span>
+                <span>Rilis ${source.tanggal_rilis}</span>
+                <span>Publikasi ${source.no_publikasi}</span>
+                <span>Katalog ${source.katalog}</span>
+              </div>
+            </div>
+            <span class="risk-badge success">${source.status_verifikasi}</span>
+          </div>
+          <div class="download-copy">${source.catatan} • ${source.download_strategy}</div>
+          <div class="source-actions">
+            <a class="btn secondary" href="${source.landing_page_url}" target="_blank" rel="noopener">Buka halaman resmi</a>
+            ${source.pdf_download_url ? `<a class="btn primary" href="${source.pdf_download_url}" target="_blank" rel="noopener">Unduh PDF</a>` : `<button class="btn secondary" type="button" disabled>Unduh via halaman resmi</button>`}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderCases() {
+      el.caseList.innerHTML = state.cases.map(item => `
+        <div class="case-card">
+          <div class="case-top">
+            <div>
+              <div class="case-title">${item.title}</div>
+              <div class="source-meta">
+                <span>${item.case_id}</span>
+                <span>${item.owner}</span>
+                <span>Jatuh tempo ${item.due}</span>
+              </div>
+            </div>
+            <span class="risk-badge ${item.priority === 'High' ? 'danger' : 'warning'}">${item.priority}</span>
+          </div>
+          <div class="case-summary">${item.summary}</div>
+          <div class="alert-bottom">
+            <span class="alert-meta">Status: ${item.status}</span>
+            <button type="button" class="btn ghost" data-open-analysis="${item.transaction_id}">Buka transaksi</button>
+          </div>
+        </div>
+      `).join('');
+      el.taskList.innerHTML = state.tasks.map(task => `
+        <div class="task-row">
+          <div class="task-row-top">
+            <div>
+              <div class="case-title">${task.title}</div>
+              <div class="source-meta">
+                <span>${task.location}</span>
+                <span>${task.assignee}</span>
+                <span>${task.due}</span>
+              </div>
+            </div>
+            <span class="risk-badge warning">${task.status}</span>
+          </div>
+        </div>
+      `).join('');
+      document.querySelectorAll('[data-open-analysis]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.selectedAlertId = btn.dataset.openAnalysis;
+          renderAnalysisList();
+          renderAnalysisDetail();
+          updatePage('analysis');
+        });
+      });
+    }
+
+    function createCaseFromSelected() {
+      const item = getAnalysisItemById(state.selectedAlertId);
+      const tx = SEED.transactions.find(row => row.transaction_id === item.transaction_id);
+      const existing = state.cases.find(caseItem => caseItem.transaction_id === item.transaction_id);
+      if (existing) {
+        showToast('Kasus untuk transaksi ini sudah ada.', 'info');
+        updatePage('cases');
+        return;
+      }
+      state.cases.unshift({
+        case_id: `KAS-${100 + state.cases.length + 1}`,
+        title: `Review ${tx.item_laporan.toLowerCase()}`,
+        priority: item.risk,
+        status: 'Baru dibuat',
+        owner: ROLE_CONFIG[state.role].roleLabel,
+        due: '20 Mar 2026',
+        summary: `Kasus dibuat dari hasil analisis ${tx.item_laporan} dengan deviasi ${item.deviation_text}.`,
+        transaction_id: item.transaction_id
+      });
+      renderCases();
+      showToast('Kasus investigasi berhasil dibuat.', 'success');
+      updatePage('cases');
+    }
+
+    function createTaskFromSelected() {
+      const item = getAnalysisItemById(state.selectedAlertId);
+      const tx = SEED.transactions.find(row => row.transaction_id === item.transaction_id);
+      state.tasks.unshift({
+        task_id: `TSK-${200 + state.tasks.length + 1}`,
+        title: `Verifikasi lapangan ${tx.item_laporan.toLowerCase()}`,
+        location: item.region,
+        assignee: state.role === 'field' ? 'Petugas Lapangan Aktif' : 'Tim Lapangan Regional',
+        due: 'Besok 09:00',
+        status: 'Baru dikirim'
+      });
+      renderCases();
+      showToast('Tugas verifikasi berhasil dikirim.', 'success');
+      updatePage('cases');
+    }
+
+    function renderDownloads() {
+      el.downloadGrid.innerHTML = DOWNLOADS.map(item => `
+        <div class="download-card">
+          <div class="download-top">
+            <div style="display:flex; gap:12px; align-items:start;">
+              <span class="download-icon ${item.tone}">${item.icon}</span>
+              <div>
+                <div class="case-title">${item.title}</div>
+                <div class="download-copy">${item.copy}</div>
+              </div>
+            </div>
+          </div>
+          <div class="button-row">
+            <a class="btn secondary" href="${item.href}" ${item.external ? 'target="_blank" rel="noopener"' : 'download'}>${item.cta}</a>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function handleImportFile(file) {
+      if (!file) return;
+      const name = file.name.toLowerCase();
+      if (name.endsWith('.csv')) {
+        el.importStateBox.className = 'status-panel loading';
+        el.importStateBox.innerHTML = '<strong>Sedang memuat file CSV...</strong><span>Prototype membaca isi file dan menyiapkan preview data.</span>';
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            const rows = parseCSV(String(reader.result || ''));
+            if (!rows.length) {
+              el.importStateBox.className = 'status-panel error';
+              el.importStateBox.innerHTML = '<strong>File tidak dapat diproses.</strong><span>CSV kosong atau format tidak sesuai.</span>';
+              el.importPreviewContainer.classList.add('hidden');
+              return;
+            }
+            state.importRows = rows.slice(0, 8);
+            renderImportPreview();
+            showToast('CSV berhasil dimuat.', 'success');
+          } catch (error) {
+            el.importStateBox.className = 'status-panel error';
+            el.importStateBox.innerHTML = '<strong>Gagal memuat data.</strong><span>Periksa format file lalu coba lagi.</span>';
+            showToast('Gagal membaca CSV.', 'error');
+          }
+        };
+        reader.readAsText(file);
+        return;
+      }
+      if (name.endsWith('.xlsx') || name.endsWith('.xls')) {
+        state.importRows = SAMPLE_ROWS;
+        renderImportPreview();
+        el.importStateBox.className = 'status-panel success';
+        el.importStateBox.innerHTML = '<strong>File Excel diterima.</strong><span>Mode prototype menampilkan preview dari dataset demo untuk simulasi parsing Excel.</span>';
+        showToast('File Excel diterima di mode demo.', 'info');
+        return;
+      }
+      el.importStateBox.className = 'status-panel error';
+      el.importStateBox.innerHTML = '<strong>Format file belum didukung.</strong><span>Gunakan CSV atau workbook contoh yang tersedia pada paket demo.</span>';
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('panutanku_token');
+      state.token = '';
+      setView('login');
+      showToast('Sesi demo diakhiri.', 'info');
+    }
+
+    function resetPrototype() {
+      localStorage.removeItem('panutanku_token');
+      localStorage.removeItem('panutanku_onboarding');
+      localStorage.removeItem('panutanku_role');
+      state.token = '';
+      state.onboardingSeen = false;
+      state.slideIndex = 0;
+      state.role = 'auditor';
+      state.importRows = [];
+      state.cases = structuredClone(CASES);
+      state.tasks = structuredClone(TASKS);
+      renderOnboarding();
+      setView('onboarding');
+      showToast('Prototype direset ke kondisi awal.', 'success');
+    }
+
+    function initEvents() {
+      el.btnPrevSlide.addEventListener('click', () => {
+        state.slideIndex = Math.max(0, state.slideIndex - 1);
+        renderOnboarding();
+      });
+      el.btnNextSlide.addEventListener('click', () => {
+        if (state.slideIndex >= onboardingSlides.length - 1) {
+          completeOnboarding();
+          return;
+        }
+        state.slideIndex += 1;
+        renderOnboarding();
+      });
+      el.btnSkipOnboarding.addEventListener('click', completeOnboarding);
+
+      el.togglePassword.addEventListener('click', () => {
+        const isPassword = el.loginPassword.getAttribute('type') === 'password';
+        el.loginPassword.setAttribute('type', isPassword ? 'text' : 'password');
+        el.togglePassword.textContent = isPassword ? 'Sembunyikan' : 'Tampilkan';
+      });
+
+      el.loginForm.addEventListener('submit', event => {
+        event.preventDefault();
+        if (!validateLogin()) return;
+        loginSuccess('form');
+      });
+
+      document.getElementById('btnDemoLogin').addEventListener('click', () => {
+        el.loginEmail.value = 'auditor@instansi.go.id';
+        el.loginPassword.value = 'demo';
+        el.loginEmailError.textContent = '';
+        el.loginPasswordError.textContent = '';
+        loginSuccess('demo');
+      });
+      document.getElementById('btnSSO').addEventListener('click', () => {
+        el.loginEmail.value = 'sso-user@instansi.go.id';
+        el.loginPassword.value = '***';
+        loginSuccess('sso');
+      });
+      document.getElementById('btnForgotPassword').addEventListener('click', () => {
+        showToast('Mode prototype: alur reset password belum dihubungkan ke backend.', 'info');
+      });
+
+      document.querySelectorAll('[data-page], [data-page-jump]').forEach(btn => {
+        btn.addEventListener('click', () => updatePage(btn.dataset.page || btn.dataset.pageJump));
+      });
+
+      document.getElementById('btnUseDemoRows').addEventListener('click', () => {
+        state.importRows = SAMPLE_ROWS;
+        renderImportPreview();
+        showToast('Dataset demo berhasil dimuat.', 'success');
+      });
+      document.getElementById('btnSimulateAnalysis').addEventListener('click', () => {
+        el.importStateBox.className = 'status-panel loading';
+        el.importStateBox.innerHTML = '<strong>Analisis harga sedang diproses...</strong><span>Mohon tunggu sebentar.</span>';
+        setTimeout(() => {
+          state.importRows = SAMPLE_ROWS;
+          renderImportPreview();
+          showToast('Analisis demo selesai dijalankan.', 'success');
+          updatePage('analysis');
+        }, 900);
+      });
+      el.importInput.addEventListener('change', event => handleImportFile(event.target.files?.[0]));
+
+      document.querySelectorAll('.risk-filter').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.visibleRisk = btn.dataset.risk;
+          document.querySelectorAll('.risk-filter').forEach(chip => chip.classList.toggle('is-active', chip.dataset.risk === state.visibleRisk));
+          renderAnalysisList();
+          renderAnalysisDetail();
+        });
+      });
+
+      document.getElementById('btnCreateCaseFromSelected').addEventListener('click', createCaseFromSelected);
+      document.getElementById('btnCreateTaskFromSelected').addEventListener('click', createTaskFromSelected);
+      document.getElementById('btnResetPrototype').addEventListener('click', resetPrototype);
+      document.getElementById('btnLogoutProfile').addEventListener('click', handleLogout);
+      document.getElementById('btnLogoutSidebar').addEventListener('click', handleLogout);
+      document.getElementById('btnProfileQuick').addEventListener('click', () => updatePage('profile'));
+      el.roleSelect.addEventListener('change', event => {
+        applyRole(event.target.value);
+        showToast(`Peran diganti ke ${ROLE_CONFIG[event.target.value].roleLabel}.`, 'info');
+      });
+    }
+
+    function bootstrap() {
+      renderOnboarding();
+      initEvents();
+      setTimeout(() => {
+        el.splash.classList.add('is-hidden');
+        if (state.token) {
+          openApp();
+        } else if (state.onboardingSeen) {
+          setView('login');
+        } else {
+          setView('onboarding');
+        }
+      }, 1800);
+    }
+
+    bootstrap();
+  </script>
+</body>
+</html>
